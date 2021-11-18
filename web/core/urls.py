@@ -21,6 +21,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework.routers import DefaultRouter
 
 from core import settings
+from parsing.views import EbayAPIView
 
 router = DefaultRouter()
 
@@ -40,6 +41,7 @@ urlpatterns = [
     path('docs/', schema_view.with_ui()),
     path('admin/', admin.site.urls),
     path('accounts/', include("account.urls")),
+    path('ebay/', EbayAPIView.as_view()),
 ]
 
 if settings.DEBUG:
