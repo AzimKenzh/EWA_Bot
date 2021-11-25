@@ -21,10 +21,13 @@ from drf_yasg.views import get_schema_view
 from rest_framework.routers import DefaultRouter
 
 from core import settings
-from parsing.views import EbayAPIView
+from parsing.views import *
 
 router = DefaultRouter()
 
+router.register('ebay_admin', EbayAdminViewSet)
+router.register('amazon_admin', AmazonAdminViewSet)
+router.register('walmart_admin', WalmartAdminViewSet)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -41,7 +44,10 @@ urlpatterns = [
     path('docs/', schema_view.with_ui()),
     path('admin/', admin.site.urls),
     path('accounts/', include("account.urls")),
-    path('ebay/', EbayAPIView.as_view()),
+    path('ebay_pars/', EbayAPIView.as_view()),
+    path('amazon_pars/', AmazonAPIView.as_view()),
+    path('walmart_pars/', WalmartAPIView.as_view()),
+    path('', include(router.urls)),
 ]
 
 if settings.DEBUG:

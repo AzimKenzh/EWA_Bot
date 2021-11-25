@@ -71,7 +71,7 @@ def get_page_detail(url) -> dict:
     return data
 
 
-def main():
+def ebay_main():
 
     list_urls = [
         'https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313&_nkw=Maybelline+Instant+Age+Rewind+Eraser+Dark+Circles+Treatment+Concealer++Warm+Light+0.2+++Oz+&_sacat=0&LH_TitleDesc=0&_fsrp=1&_odkw=Julep+Eyeshadow+101+Cr%C3%A8me+to+Powder+Waterproof+Eyeshadow+Stick+Stone&_osacat=0&_sop=10&LH_PrefLoc=1&_fcid=1',
@@ -136,9 +136,11 @@ def main():
             try:
                 data = future.result()
                 urls.extend(data)
-                print('parsed listing urls -> ', len(data), data)
+                # print('parsed listing urls -> ', len(data), data)
             except Exception as exc:
-                print('%r generated an exception: %s' % (data, exc))
+                pass
+                # print('%r generated an exception: %s' % (data, exc))
+
 
         future_to_url = {executor.submit(get_page_detail, url): url for url in urls}
         for future in as_completed(future_to_url):
@@ -146,9 +148,12 @@ def main():
             try:
                 data = future.result()
                 items_data.append(data)
-                print('parsed item -> ', data)
+                # print('parsed item -> ', data)
             except Exception as exc:
-                print('%r generated an exception: %s' % (data, exc))
+                pass
+                # print('%r generated an exception: %s' % (data, exc))
+
+        # print(len(items_data), '-------------------------------------------------')
 
     # filtering and saving to database
     for item in items_data:
@@ -168,7 +173,7 @@ def main():
             continue
         Ebay.objects.update_or_create(url=item['url'], defaults={'title': item['title']})   # время 0.26358866691589355
 
-
+    return urls
 
 # общ время 42.227277517318726
 
