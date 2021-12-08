@@ -173,6 +173,7 @@ def ebay_main():
             continue
         Ebay.objects.update_or_create(url=item['url'], defaults={'title': item['title']})   # время 0.26358866691589355
 
+        print(len(urls))
     return urls
 
 # общ время 42.227277517318726

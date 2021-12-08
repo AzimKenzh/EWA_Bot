@@ -1,4 +1,7 @@
+from random import randrange
+from time import sleep
 from typing import List
+import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -17,6 +20,7 @@ headers = {
 
 
 def get_page_item_urls(html) -> List[dict]:
+    sleep(randrange(13))
     soup = BeautifulSoup(requests.get(html, headers=headers).content.decode(), 'lxml')
     amazon_ = soup.find_all('div',
                             class_='sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col s-widget-spacing-small sg-col-4-of-20')
@@ -117,52 +121,24 @@ def amazon_main():
             try:
                 data = future.result()
                 parsed_items.extend(data)
+                # print(data)
             except Exception as exc:
                 pass
                 # print('%r generated an exception: %s' % (url, exc))
 
     for item in parsed_items:
-        print(item['title'], 'title')
+        # print(item['title'], 'title')
         if check_title(item['title']):
-            print('found', item['url'])
+            # print('found', item['url'])
             Amazon.objects.update_or_create(url=item['url'], defaults={'title': item['title']})
         else:
-            print('not found', item['url'])
+            ''    # print('not found', item['url'])
 
-        # print(len(parsed_items), '-----------------------') # 1729 -----------------------
+        print(len(parsed_items), '-----------------------') # 1729 -----------------------
 
     return parsed_items
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ["Maybelline Instant Age Rewind Eraser Dark Circles Treatment Concealer", "Maybelline Instant Age Rewind Eraser Dark Circles Treatment Multi-Use", "Softsoap Liquid Hand Soap, Fresh Breeze  7.5 Oz",
-#  "Julep Eyeshadow 101", "Maybelline New York SuperStay", "Cuccio Naturale Sweet Almond Cuticle Oil", "Maybelline SuperStay Ink Crayon Matte Longwear Lipstick With Built-in Sharpener",
-#  "Denman Hair Brush", "e.l.f. 16HR Camo Concealer", "NYX PROFESSIONAL MAKEUP Precision", "L'Oreal Paris Makeup Infallible Never", "Maybelline SuperStay 24, 2-Step Liquid Lipstick, Coffee Edition, Chai Once More",
-#  "Maybelline SuperStay 24, 2-Step Liquid Lipstick, Infinite Petal", "Rimmel Magnif' Eye Liner, Brown", "L'Oreal Paris Superior Preference Fade-Defying + Shine Permanent Hair Color", "Maybelline New York Super Stay Full Coverage Liquid Foundation Makeup",
-#  "Maybelline Super Stay Full Coverage Liquid Foundation Makeup", "Maybelline New York Liquid", "Garnier Hair Color Olia Oil Powered Permanent",
-#  "Australian Gold Botanical Sunscreen Tinted Face BB Cream SPF 50, 3 Ounce", "Garnier Olia Oil Powered Permanent Hair Color, 5.0 Medium Brown", "Revlon Root Erase Permanent Hair Color, At-Home Root Touchup Hair Dye with Applicator Brush for Multiple Use, 100% Gray Coverage",
-#  "Dove Skin Care Beauty Bar For Softer Skin Cucumber And Green Tea More Moisturizing Than Bar Soap 3.75 oz", "L'Oréal Paris True Match Super-Blendable Powder", "Aveeno Apple Cider Vinegar",
-#  "Rimmel Natural Bronzer", "L'Oreal Paris Age Perfect Radiant Serum Foundation with SPF 50", "Maybelline Color Sensational Lipstick, Lip Makeup, Cream Finish, Hydrating Lipstick, Nude, Pink, Red, Plum Lip Color",
-#  "Goody Ouchless value", "Alaffia Authentic African Black Soap All-in-One", "Tree Hut 24 Hour Intense Hydrating Shea Body Butter", "Old Spice Red Collection", "L'Oreal Paris Makeup Infallible Super Slim Long-Lasting Liquid Eyeliner, Ultra-Fine Felt Tip, Quick Drying Formula",
-#  "Dove Beauty Bar More Moisturizing Than", "Maybelline New York Brow Tattoo", "Julep When Pencil Met Gel Long-Lasting Waterproof Gel Eyeliner", "Rimmel Stay Matte Liquid Foundation",
-#  "L'Oreal Paris Cosmetics Magic BB Cream", "BIC Flex 5", "Kirk's Original Coco Castile Bar Soap", "L'Oréal Paris Makeup Magic Skin Beautifier BB", "L'Oreal Paris Colorista 1-Day Washable Temporary Hair Color",
-#  "L'Oreal Paris Colorista 1-Day Washable Temporary Hair Color Spray", "CloSYS Ultra Sensitive Mouthwash", "bareMinerals Barepro Performance Wear Powder Foundation",
-#  "Maybelline Color Sensational Lipstick", "e.l.f. Glossy Gloss  Sweet"
-#  ]
 

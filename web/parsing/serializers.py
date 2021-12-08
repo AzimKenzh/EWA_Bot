@@ -16,6 +16,15 @@ class EbaySerializerAdmin(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class EbaySerializerExport(serializers.ModelSerializer):
+    title = serializers.CharField(max_length=800, required=False)
+    url = serializers.URLField(required=False)
+
+    class Meta:
+        model = Ebay
+        exclude = ('id', )
+
+
 class AmazonSerializer(serializers.Serializer):
     url = serializers.URLField()
     title = serializers.CharField(max_length=200)
@@ -31,8 +40,11 @@ class AmazonSerializerAdmin(serializers.ModelSerializer):
 
 
 class WalmartSerializer(serializers.Serializer):
-    url = serializers.URLField()
     title = serializers.CharField(max_length=200)
+    url = serializers.URLField()
+    shipping = serializers.CharField(max_length=200)
+    quantity = serializers.CharField(max_length=200)
+    # quantity = serializers.CharField(max_length=200)
 
 
 class WalmartSerializerAdmin(serializers.ModelSerializer):
