@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from parsing.models import Ebay, Walmart, Amazon, ImportExcel
+from parsing.models import Ebay, Walmart, Amazon, ImportExcels
 
 
 @admin.register(Ebay)
@@ -21,7 +21,7 @@ class AdminWalmart(admin.ModelAdmin):
     list_display_links = ['id', 'title']
 
 
-@admin.register(ImportExcel)
+@admin.register(ImportExcels)
 class AdminImportExcel(admin.ModelAdmin):
     list_display = ['id', 'title']
 
