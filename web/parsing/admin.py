@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
 from parsing.models import Ebay, Walmart, Amazon, ImportExcels
 
@@ -22,6 +23,6 @@ class AdminWalmart(admin.ModelAdmin):
 
 
 @admin.register(ImportExcels)
-class AdminImportExcel(admin.ModelAdmin):
+class AdminImportExcel(admin.ModelAdmin, DynamicArrayMixin):
     list_display = ['id', 'title']
 
