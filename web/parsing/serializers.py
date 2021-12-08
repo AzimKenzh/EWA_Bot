@@ -56,3 +56,11 @@ class WalmartSerializerAdmin(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
+class ImportExcelSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(max_length=800, required=False)
+
+    class Meta:
+        model = Walmart
+        fields = '__all__'
+

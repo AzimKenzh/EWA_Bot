@@ -26,4 +26,8 @@ class Walmart(models.Model):
     def __str__(self):
         return self.title
 
+
+class ImportExcel(models.Model):
+    title = models.JSONField(blank=True, null=True)
+
 #todo: export excel

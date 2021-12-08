@@ -26,6 +26,7 @@ from parsing.views import *
 router = DefaultRouter()
 
 router.register('ebay_admin', EbayAdminViewSet)
+router.register('import_excel', ImportExcelViewSet)
 router.register('amazon_admin', AmazonAdminViewSet)
 router.register('walmart_admin', WalmartAdminViewSet)
 

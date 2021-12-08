@@ -60,10 +60,17 @@ class WalmartAdminViewSet(viewsets.ModelViewSet):
     serializer_class = WalmartSerializerAdmin
 
 
-class EbayExportViewSet(viewsets.ModelViewSet):
-    queryset = Ebay.objects.all()
-    serializer_class = EbaySerializerExport
-    #
+class ImportExcelViewSet(viewsets.ModelViewSet):
+    queryset = ImportExcel.objects.all()
+    serializer_class = ImportExcelSerializer
+
+
+
+
+
+
+
+
     # ebay = open('ebay.csv', 'wb')
     # c = csv.writer(ebay)
     #
