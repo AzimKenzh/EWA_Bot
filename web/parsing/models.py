@@ -1,4 +1,5 @@
 from django.db import models
+from django_better_admin_arrayfield.models.fields import ArrayField
 
 
 class Ebay(models.Model):
@@ -27,7 +28,7 @@ class Walmart(models.Model):
         return self.title
 
 
-class ImportExcel(models.Model):
-    title = models.JSONField(blank=True, null=True)
+class ImportExcels(models.Model):
+    title = ArrayField(models.CharField(max_length=400), blank=True, null=True)
 
 #todo: export excel

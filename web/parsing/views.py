@@ -61,7 +61,7 @@ class WalmartAdminViewSet(viewsets.ModelViewSet):
 
 
 class ImportExcelViewSet(viewsets.ModelViewSet):
-    queryset = ImportExcel.objects.all()
+    queryset = ImportExcels.objects.all()
     serializer_class = ImportExcelSerializer
 
 
