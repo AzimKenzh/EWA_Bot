@@ -60,8 +60,13 @@ def check_title(in_title: str) -> bool:
     return False
 
 
-def amazon_main():
-    amazons_url = ['https://www.amazon.com/s?k=Maybelline+Instant+Age+Rewind+Eraser+Dark+Circles+Treatment+Concealer+Warm+Light+0.2+Oz&ref=nb_sb_noss',
+def amazon_main(instance=None):
+    if instance:
+        title = instance.title.replace(' ', '+')
+        amazons_url = [f'https://www.amazon.com/s?k={title}&ref=nb_sb_noss',]
+    else:
+
+        amazons_url = ['https://www.amazon.com/s?k=Maybelline+Instant+Age+Rewind+Eraser+Dark+Circles+Treatment+Concealer+Warm+Light+0.2+Oz&ref=nb_sb_noss',
                    'https://www.amazon.com/s?k=Maybelline+Instant+Age+Rewind+Eraser+Dark+Circles+Treatment+Multi-Use+Concealer+Light+0.2+Oz&ref=nb_sb_noss',
                    'https://www.amazon.com/s?k=Softsoap+Liquid+Hand+Soap%2C+Fresh+Breeze+7.5+Oz&ref=nb_sb_noss_2',
                    'https://www.amazon.com/s?k=Julep+Eyeshadow+101+Cr%C3%A8me+to+Powder+Waterproof+Eyeshadow+Stick+Stone&ref=nb_sb_noss_2',
@@ -130,7 +135,7 @@ def amazon_main():
         # print(item['title'], 'title')
         if check_title(item['title']):
             # print('found', item['url'])
-            Amazon.objects.update_or_create(url=item['url'], defaults={'title': item['title']})
+            Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id, defaults={'title': item['title']})
         else:
             ''    # print('not found', item['url'])
 

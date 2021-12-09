@@ -39,27 +39,25 @@ class AmazonSerializerAdmin(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class WalmartSerializer(serializers.Serializer):
-    title = serializers.CharField(max_length=200)
-    url = serializers.URLField()
-    shipping = serializers.CharField(max_length=200)
-    quantity = serializers.CharField(max_length=200)
-    # quantity = serializers.CharField(max_length=200)
-
-
-class WalmartSerializerAdmin(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=800, required=False)
-    url = serializers.URLField(required=False)
-
-    class Meta:
-        model = Walmart
-        fields = '__all__'
+# class WalmartSerializer(serializers.Serializer):
+#     title = serializers.CharField(max_length=200)
+#     url = serializers.URLField()
+#     shipping = serializers.CharField(max_length=200)
+#     quantity = serializers.CharField(max_length=200)
+#     # quantity = serializers.CharField(max_length=200)
+#
+#
+# class WalmartSerializerAdmin(serializers.ModelSerializer):
+#     title = serializers.CharField(max_length=800, required=False)
+#     url = serializers.URLField(required=False)
+#
+#     class Meta:
+#         model = Walmart
+#         fields = '__all__'
 
 
 class ImportExcelSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=800, required=False)
 
     class Meta:
         model = ImportExcels
         fields = '__all__'
-

@@ -26,9 +26,9 @@ from parsing.views import *
 router = DefaultRouter()
 
 router.register('ebay_admin', EbayAdminViewSet)
-router.register('import_excel', ImportExcelViewSet)
+router.register('product_title', ProductTitleViewSet)
 router.register('amazon_admin', AmazonAdminViewSet)
-router.register('walmart_admin', WalmartAdminViewSet)
+# router.register('walmart_admin', WalmartAdminViewSet)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -45,9 +45,9 @@ urlpatterns = [
     path('docs/', schema_view.with_ui()),
     path('admin/', admin.site.urls),
     path('accounts/', include("account.urls")),
-    path('ebay_pars/', EbayAPIView.as_view()),
-    path('amazon_pars/', AmazonAPIView.as_view()),
-    path('walmart_pars/', WalmartAPIView.as_view()),
+    # path('ebay_parse/', EbayAPIView.as_view()),
+    # path('amazon_parse/', AmazonAPIView.as_view()),
+    # path('walmart_parse/', WalmartAPIView.as_view()),
     path('', include(router.urls)),
 ]
 

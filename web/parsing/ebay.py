@@ -4,7 +4,7 @@ from typing import List
 from bs4 import BeautifulSoup
 import requests
 from concurrent.futures import as_completed, ThreadPoolExecutor
-from parsing.models import Ebay
+from parsing.models import Ebay, ImportExcels
 
 
 def get_page_item_urls(in_url) -> List[str]:
@@ -68,12 +68,24 @@ def get_page_detail(url) -> dict:
         percent = 0
     data['percent'] = percent
 
+
+    try:
+        location = soup.find('span', itemprop='availableAtOrFrom').text.split()[-1]
+
+    except:
+        location = ''
+    data['location'] = location
+
     return data
 
 
-def ebay_main():
+def ebay_main(instance=None):
+    if instance:
+        title = instance.title.replace(' ', '+')
 
-    list_urls = [
+        ebay_urls = [f'https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw={title}&_sacat=0',]
+    else:
+        ebay_urls = [
         'https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313&_nkw=Maybelline+Instant+Age+Rewind+Eraser+Dark+Circles+Treatment+Concealer++Warm+Light+0.2+++Oz+&_sacat=0&LH_TitleDesc=0&_fsrp=1&_odkw=Julep+Eyeshadow+101+Cr%C3%A8me+to+Powder+Waterproof+Eyeshadow+Stick+Stone&_osacat=0&_sop=10&LH_PrefLoc=1&_fcid=1',
         'https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313&_nkw=Maybelline+Instant+Age+Rewind+Eraser+Dark+Circles+Treatment+Multi-Use+Concealer+Light++0.2+Oz+&_sacat=0&LH_TitleDesc=0&_fsrp=1&_odkw=Maybelline+Instant+Age+Rewind+Eraser+Dark+Circles+Treatment+Concealer++Warm+Light+0.2+++Oz+&_osacat=0&_sop=10&LH_PrefLoc=1&_fcid=1',
         'https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313&_nkw=Softsoap+Liquid+Hand+Soap%2C+Fresh+Breeze++7.5+Oz&_sacat=0&LH_TitleDesc=0&_fsrp=1&_odkw=Maybelline+Instant+Age+Rewind+Eraser+Dark+Circles+Treatment+Multi-Use+Concealer+Light++0.2+Oz+&_osacat=0&_sop=10&LH_PrefLoc=1&_fcid=1',
@@ -130,13 +142,13 @@ def ebay_main():
 
     with ThreadPoolExecutor(max_workers=10) as executor:
         # todo: if many list pages with urls in them, use thread pool executor too to parse urls concurrently
-        futures = {executor.submit(get_page_item_urls, url): url for url in list_urls}  # list urls -> 50 urls
+        futures = {executor.submit(get_page_item_urls, url): url for url in ebay_urls}  # list urls -> 50 urls
         for future in as_completed(futures):
             url = futures[future]
             try:
                 data = future.result()
                 urls.extend(data)
-                # print('parsed listing urls -> ', len(data), data)
+                print('parsed listing urls -> ', len(data), data)
             except Exception as exc:
                 pass
                 # print('%r generated an exception: %s' % (data, exc))
@@ -148,14 +160,14 @@ def ebay_main():
             try:
                 data = future.result()
                 items_data.append(data)
-                # print('parsed item -> ', data)
+                print('parsed item -> ', data)
             except Exception as exc:
                 pass
                 # print('%r generated an exception: %s' % (data, exc))
 
         # print(len(items_data), '-------------------------------------------------')
 
-    # filtering and saving to database
+    # # filtering and saving to database
     for item in items_data:
         """ Filtering conditions:
         condition = new and new with box
@@ -171,18 +183,11 @@ def ebay_main():
             continue
         elif item['percent'] < 98:
             continue
-        Ebay.objects.update_or_create(url=item['url'], defaults={'title': item['title']})   # время 0.26358866691589355
+        elif item['location'].lower() not in ['states']:
+            continue
+        Ebay.objects.update_or_create(url=item['url'],  product_title_id=instance.id, defaults={'title': item['title']})   # время 0.26358866691589355
 
-        print(len(urls))
+        # print(len(urls))
     return urls
 
-# общ время 42.227277517318726
-
-#
-# if __name__ == '__main__':
-#     EBAY_URL = 'https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313&_nkw=Maybelline+Instant+Age+Rewind+Eraser+Dark+Circles+Treatment+Concealer++Warm+Light+0.2+++Oz+&_sacat=0&LH_TitleDesc=0&_fsrp=1&rt=nc&_odkw=Maybelline+Instant+Age+Rewind+Eraser+Dark+Circles+Treatment+Multi-Use+Concealer+Light++0.2+Oz+&_osacat=0&LH_PrefLoc=1'
-#     main(EBAY_URL)
-
-# with ProcessPoolExecutor(max_workers=10) as i:
-#     f = [i.submit(main, url) for url in EBAY_URL]
 
