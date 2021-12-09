@@ -9,9 +9,11 @@ class ImportExcels(models.Model):
         ('parsed', 'parsed'),
     ]
     title = models.CharField(max_length=400, blank=True, null=True)
+    url = models.CharField(max_length=400, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=25, choices=STATUS, default=STATUS[0][0])
+    active = models.BooleanField(default=True)
 
 
 class Ebay(models.Model):

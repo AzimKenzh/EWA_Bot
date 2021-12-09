@@ -76,12 +76,14 @@ class ProductTitleViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def parse(self, request, pk=None):
         instance = self.get_object()
-        instance.status = 'parsing'
-        instance.save()
+        if instance.active == True:
+            instance.status = 'parsing'
+            instance.save()
         # start parse here
 
-        ebay_main(instance)
-        amazon_main(instance)
-        instance.status = 'parsed'
-        instance.save()
+        if instance.active == True:
+            ebay_main(instance)
+            amazon_main(instance)
+            instance.status = 'parsed'
+            instance.save()
         return Response('OK')

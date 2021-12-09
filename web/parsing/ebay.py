@@ -83,7 +83,7 @@ def ebay_main(instance=None):
     if instance:
         title = instance.title.replace(' ', '+')
 
-        ebay_urls = [f'https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw={title}&_sacat=0',]
+        ebay_urls = [f'https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw={title}&_sacat=0', ]
     else:
         ebay_urls = [
         'https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313&_nkw=Maybelline+Instant+Age+Rewind+Eraser+Dark+Circles+Treatment+Concealer++Warm+Light+0.2+++Oz+&_sacat=0&LH_TitleDesc=0&_fsrp=1&_odkw=Julep+Eyeshadow+101+Cr%C3%A8me+to+Powder+Waterproof+Eyeshadow+Stick+Stone&_osacat=0&_sop=10&LH_PrefLoc=1&_fcid=1',
