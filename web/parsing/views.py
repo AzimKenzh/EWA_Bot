@@ -5,7 +5,7 @@ import timeit
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, status
 
 from parsing.amazon import amazon_main
 from parsing.ebay import ebay_main
@@ -63,6 +63,13 @@ class WalmartAdminViewSet(viewsets.ModelViewSet):
 class ImportExcelViewSet(viewsets.ModelViewSet):
     queryset = ImportExcels.objects.all()
     serializer_class = ImportExcelSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 

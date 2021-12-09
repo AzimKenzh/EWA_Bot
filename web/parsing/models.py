@@ -29,6 +29,6 @@ class Walmart(models.Model):
 
 
 class ImportExcels(models.Model):
-    title = ArrayField(models.CharField(max_length=400), blank=True, null=True)
+    title = models.CharField(max_length=400, blank=True, null=True)
 
 #todo: export excel
