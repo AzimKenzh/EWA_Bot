@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -18,6 +20,8 @@ from parsing.serializers import *
 #
 #     def save(self):
 #         self.serializer = EbaySerializer
+
+
 
 
 # class WalmartAPIView(APIView):
@@ -65,7 +69,6 @@ class ProductTitleViewSet(viewsets.ModelViewSet):
     serializer_class = ImportExcelSerializer
     permission_classes = [IsAuthenticated, ]
 
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
@@ -79,11 +82,26 @@ class ProductTitleViewSet(viewsets.ModelViewSet):
         if instance.active == True:
             instance.status = 'parsing'
             instance.save()
-        # start parse here
 
-        if instance.active == True:
+            # start parse here
             ebay_main(instance)
             amazon_main(instance)
             instance.status = 'parsed'
             instance.save()
         return Response('OK')
+
+
+class AllParseAPIView(APIView):
+    def post(self, request):
+        queryset = ImportExcels.objects.exclude(status__in=['parsing', 'parsed'], active=False)
+        for instance in queryset:
+            instance.status = 'parsing'
+            instance.save()
+
+            # start parse here
+            ebay_main(instance)
+            amazon_main(instance)
+            instance.status = 'parsed'
+            instance.save()
+        return Response('OK')
+
