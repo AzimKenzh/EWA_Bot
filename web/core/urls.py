@@ -28,6 +28,7 @@ router = DefaultRouter()
 router.register('ebay_admin', EbayAdminViewSet)
 router.register('amazon_admin', AmazonAdminViewSet)
 router.register('product_title', ProductTitleViewSet)
+router.register('results', ResultsViewSet)
 # router.register('walmart_admin', WalmartAdminViewSet)
 
 schema_view = get_schema_view(

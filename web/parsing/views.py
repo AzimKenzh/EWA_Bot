@@ -105,3 +105,7 @@ class AllParseAPIView(APIView):
             instance.save()
         return Response('OK')
 
+
+class ResultsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = ImportExcels.objects.all()
+    serializer_class = ResultsSerializer
