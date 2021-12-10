@@ -68,6 +68,8 @@ class ProductTitleViewSet(viewsets.ModelViewSet):
     queryset = ImportExcels.objects.all()
     serializer_class = ImportExcelSerializer
     permission_classes = [IsAuthenticated, ]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['title']
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, many=True)
@@ -109,3 +111,5 @@ class AllParseAPIView(APIView):
 class ResultsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ImportExcels.objects.all()
     serializer_class = ResultsSerializer
+    permission_classes = [IsAuthenticated, ]
+
