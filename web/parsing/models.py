@@ -8,7 +8,7 @@ class ImportExcels(models.Model):
         ('parsing', 'parsing'),
         ('parsed', 'parsed'),
     ]
-    title = models.CharField(max_length=400, blank=True, null=True)
+    title = models.TextField(blank=True, null=True)
     url = models.CharField(max_length=400, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
