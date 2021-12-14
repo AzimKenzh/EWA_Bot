@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
-from parsing.models import Ebay, Walmart, Amazon, ImportExcels
+from parsing.models import Ebay, Amazon, ImportExcels
 
 
 @admin.register(Ebay)
@@ -13,12 +13,6 @@ class AdminEbay(admin.ModelAdmin):
 @admin.register(Amazon)
 class AdminAmazon(admin.ModelAdmin):
     list_display = ['id', 'title', 'created_at']
-    list_display_links = ['id', 'title']
-
-
-@admin.register(Walmart)
-class AdminWalmart(admin.ModelAdmin):
-    list_display = ['id', 'title', 'url']
     list_display_links = ['id', 'title']
 
 

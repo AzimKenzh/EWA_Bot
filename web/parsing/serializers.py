@@ -39,28 +39,16 @@ class AmazonSerializerAdmin(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# class WalmartSerializer(serializers.Serializer):
-#     title = serializers.CharField(max_length=200)
-#     url = serializers.URLField()
-#     shipping = serializers.CharField(max_length=200)
-#     quantity = serializers.CharField(max_length=200)
-#     # quantity = serializers.CharField(max_length=200)
-#
-#
-# class WalmartSerializerAdmin(serializers.ModelSerializer):
-#     title = serializers.CharField(max_length=800, required=False)
-#     url = serializers.URLField(required=False)
-#
-#     class Meta:
-#         model = Walmart
-#         fields = '__all__'
-
-
 class ImportExcelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ImportExcels
         fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['status'] = instance.get_status_display()
+        return representation
 
 
 class ResultsSerializer(serializers.ModelSerializer):
@@ -70,6 +58,6 @@ class ResultsSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['ebey'] = EbaySerializerAdmin(instance.ebays.all(), many=True, context=self.context).data
+        representation['ebay'] = EbaySerializerAdmin(instance.ebays.all(), many=True, context=self.context).data
         representation['amazon'] = AmazonSerializerAdmin(instance.amazons.all(), many=True, context=self.context).data
         return representation
