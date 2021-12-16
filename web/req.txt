@@ -17,3 +17,5 @@ selenium==4.0.0
 selenium-requests
 openpyxl==3.0.9
 django-better-admin-arrayfield==1.4.2
+PyJWT==2.3.0
+firebase-admin
