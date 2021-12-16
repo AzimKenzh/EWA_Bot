@@ -8,7 +8,6 @@ RUN npm run build
 COPY . .
 
 
-
 # Final build
 FROM nginx:1.19.0-alpine
 WORKDIR /app
