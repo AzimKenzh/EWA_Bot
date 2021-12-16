@@ -1,7 +1,7 @@
 # Admin project build
 FROM node:14.16.0-alpine3.10 as build_admin
 
-COPY admin-app /app_admin
+COPY admin-app/frontend /app_admin
 WORKDIR /app_admin
 RUN npm install
 RUN npm run build
