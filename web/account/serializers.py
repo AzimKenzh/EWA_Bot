@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from account.models import MyUser
+from parsing.models import ImportExcels
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -23,3 +24,9 @@ class LoginSerializer(serializers.Serializer):
 
     class Meta:
         fields = ('username', 'password')
+
+
+class UsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyUser
+        fields = ('id', 'username')

@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate
 
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -42,4 +42,7 @@ class LogoutView(APIView):
         return Response('Successfully logged out', status=status.HTTP_200_OK)
 
 
-
+class UsersViewSet(viewsets.ModelViewSet):
+    queryset = MyUser.objects.all()
+    serializer_class = UsersSerializer
+    permission_classes = [IsAdminUser, ]

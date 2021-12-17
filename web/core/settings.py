@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 
+    'drf_api_logger',
+
     'account',
     'parsing',
 ]
@@ -64,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -200,3 +203,6 @@ JET_THEMES = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+DRF_API_LOGGER_DATABASE = True
+DRF_API_LOGGER_SIGNAL = True  # Default to False
