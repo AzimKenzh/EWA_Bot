@@ -1,23 +1,13 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from firebase_admin import credentials, firestore
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets, filters, status
-# from drf_api_logger import API_LOGGER_SIGNAL
 
 from parsing.amazon import amazon_main
 from parsing.ebay import ebay_main
 from parsing.serializers import *
-import firebase_admin
-
-
-certificate_location = './firebase/ewa-bot-d54ca-firebase-adminsdk-zj7gl-5ce88f753c.json'
-cred = credentials.Certificate(certificate_location)
-firebase_admin.initialize_app(cred)
-DB = firestore.client()
-FIREBASE_COLLECTION = DB.collection('items')
 
 
 class ProductTitleViewSet(viewsets.ModelViewSet):
@@ -62,10 +52,6 @@ class AllParseAPIView(APIView):
                 # amazon_main(instance)
                 instance.status = 'parsed'
                 instance.save()
-                document = FIREBASE_COLLECTION.document(str(instance.id))
-                document.set({'status': instance.get_status_display(), 'title': instance.title, 'url': instance.url,
-                              'created_at': instance.created_at, 'updated_at': instance.updated_at,
-                              'active': instance.active})
 
         return Response('OK')
 

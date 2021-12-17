@@ -1,4 +1,15 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+
+certificate_location = './firebase/ewa-bot-d54ca-firebase-adminsdk-zj7gl-5ce88f753c.json'
+cred = credentials.Certificate(certificate_location)
+firebase_admin.initialize_app(cred)
+DB = firestore.client()
+FIREBASE_COLLECTION = DB.collection('items')
 
 
 class ImportExcels(models.Model):
@@ -14,6 +25,14 @@ class ImportExcels(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=25, choices=STATUS, default=STATUS[0][0])
     active = models.BooleanField(default=True)
+
+
+@receiver(post_save, sender=ImportExcels)
+def synchronise_firestore(sender, instance, **kwargs):
+    document = FIREBASE_COLLECTION.document(str(instance.id))
+    document.set({'status': instance.get_status_display(), 'title': instance.title, 'url': instance.url,
+                  'created_at': instance.created_at, 'updated_at': instance.updated_at,
+                  'active': instance.active})
 
 
 class Ebay(models.Model):
