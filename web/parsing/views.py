@@ -18,6 +18,9 @@ class ProductTitleViewSet(viewsets.ModelViewSet):
     search_fields = ['title']
 
     def create(self, request, *args, **kwargs):
+        # delete before creating new items from import
+        ImportExcels.objects.all().delete()
+        # importing
         serializer = self.get_serializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

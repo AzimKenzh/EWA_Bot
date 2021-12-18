@@ -1,4 +1,5 @@
 import re
+from pprint import pprint
 from typing import List
 
 from bs4 import BeautifulSoup
@@ -30,7 +31,6 @@ def get_page_detail(url) -> dict:
 
     try:
         title = soup.find('h1', id='itemTitle').text.strip('Details about')
-        # print(title.lower())
 
     except:
         title = ''
@@ -53,7 +53,7 @@ def get_page_detail(url) -> dict:
     data['quantity'] = quantity
 
     try:
-        star = soup.find('span', class_='mbg-l').find('a').text
+        star = soup.find('div', class_='ux-seller-section__item').text
         n_star = re.findall(r'\b\d+\b', star)
         star = int(n_star[0]) if len(n_star) else 0
     except:
@@ -61,13 +61,17 @@ def get_page_detail(url) -> dict:
     data['star'] = star
 
     try:
-        percent = soup.find('div', id='si-fb').text
-        n_percent = re.findall(r'\b\d+\b', percent)
-        percent = int(n_percent[0]) if len(n_percent) else 0
+        percent = soup.find('div', class_='ux-seller-section__content').text.strip('% Positive feedback').split()[-1]
+        # n_percent = re.findall(r'\b\d+\b', percent)
+        # percent = int(n_percent[0]) if len(n_percent) else 0
 
+        # print(soup.find('div', class_='ux-seller-section__item').text)
+        # print(soup.find('div', class_='ux-seller-section__content').text, 'percent===============')
+        percent_n = int(percent)
     except:
         percent = 0
-    data['percent'] = percent
+    data['percent'] = percent_n
+    # print(type(percent_n), percent_n)
 
 
     try:
@@ -95,10 +99,8 @@ def ebay_main(instance):
             try:
                 data = future.result()
                 urls.extend(data)
-                # print('parsed listing urls -> ', len(data), data)
             except Exception as exc:
                 pass
-                # print('%r generated an exception: %s' % (data, exc))
 
         future_to_url = {executor.submit(get_page_detail, url): url for url in urls}
         for future in as_completed(future_to_url):
@@ -109,9 +111,6 @@ def ebay_main(instance):
                 # print('parsed item -> ', data)
             except Exception as exc:
                 pass
-                # print('%r generated an exception: %s' % (data, exc))
-
-        # print(len(items_data), '-------------------------------------------------')
 
     # # filtering and saving to database
     for item in items_data:
@@ -123,21 +122,29 @@ def ebay_main(instance):
         """
         # print(item['title'], REDUCTION_TITLE)
         # check title of parsed item title and imported title
-        if ' '.join(item['title'].lower().split()[:4]) in ' '.join(instance.title.lower().split()[:4]):
-            pass  # continue checking to save
-        elif item['star'] < 100:
+        # if ' '.join(item['title'].lower().split()[:4]) in ' '.join(instance.title.lower().split()[:4]):
+        #     pass  # continue checking to save
+
+        item_titlee = item['title'].lower()
+
+        if item['star'] < 100:
             continue
         elif item['quantity'] < 3:
             continue
-        elif item['condition'].lower() not in ['new', 'new with box']: #todo: 
-            #todo: new other исклюсить
+        elif item['condition'].lower() not in ['new', 'new with box']:
             continue
         elif item['percent'] < 98:
             continue
         elif item['location'].lower() not in ['states']:
             continue
         # saving parsed item to DB
+        elif instance.company and instance.company.lower() in item_titlee and \
+                instance.color and instance.color.lower() in item_titlee and \
+                instance.item_title and instance.item_title.lower() in item_titlee and \
+                instance.volume and instance.volume.lower() in item_titlee:
+            pass
         try:
+            # print('saveddddddddddddddddddddddddddddd')
             Ebay.objects.update_or_create(url=item['url'], star=item['star'], quantity=item['quantity'],
                                           percent=item['percent'],  product_title_id=instance.id,
                                           defaults={'title': item['title']})   # время 0.26358866691589355
