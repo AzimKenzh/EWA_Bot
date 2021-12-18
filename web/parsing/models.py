@@ -24,7 +24,6 @@ class ImportExcels(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=25, choices=STATUS, default=STATUS[0][0])
-    active = models.BooleanField(default=True)
 
 
 @receiver(post_save, sender=ImportExcels)
@@ -36,7 +35,7 @@ def synchronise_firestore(sender, instance, **kwargs):
 
 
 class Ebay(models.Model):
-    product_title = models.ForeignKey(ImportExcels, on_delete=models.SET_NULL, related_name='ebays', null=True)
+    product_title = models.ForeignKey(ImportExcels, on_delete=models.CASCADE, related_name='ebays', null=True)
     title = models.TextField(verbose_name='Название', blank=True, null=True)
     url = models.URLField(max_length=5000, blank=True, null=True)
     star = models.IntegerField(blank=True, null=True)
@@ -52,7 +51,7 @@ class Ebay(models.Model):
 
 
 class Amazon(models.Model):
-    product_title = models.ForeignKey(ImportExcels, on_delete=models.SET_NULL, related_name='amazons', null=True)
+    product_title = models.ForeignKey(ImportExcels, on_delete=models.CASCADE, related_name='amazons', null=True)
     title = models.TextField(verbose_name='Название', blank=True, null=True)
     url = models.URLField(max_length=5000, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True)

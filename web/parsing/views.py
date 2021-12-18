@@ -27,15 +27,14 @@ class ProductTitleViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def parse(self, request, pk=None):
         instance = self.get_object()
-        if instance.active:
-            instance.status = 'parsing'
-            instance.save()
+        instance.status = 'parsing'
+        instance.save()
 
-            # start parse here
-            ebay_main(instance)
-            amazon_main(instance)
-            instance.status = 'parsed'
-            instance.save()
+        # start parse here
+        ebay_main(instance)
+        amazon_main(instance)
+        instance.status = 'parsed'
+        instance.save()
         return Response('OK')
 
 
@@ -43,15 +42,14 @@ class AllParseAPIView(APIView):
     def post(self, request):
         queryset = ImportExcels.objects.exclude(status__in=['parsing', 'parsed'])
         for instance in queryset:
-            if instance.active:
-                instance.status = 'parsing'
-                instance.save()
+            instance.status = 'parsing'
+            instance.save()
 
-                # start parse here
-                ebay_main(instance)
-                # amazon_main(instance)
-                instance.status = 'parsed'
-                instance.save()
+            # start parse here
+            ebay_main(instance)
+            # amazon_main(instance)
+            instance.status = 'parsed'
+            instance.save()
 
         return Response('OK')
 
