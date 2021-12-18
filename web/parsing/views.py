@@ -62,9 +62,6 @@ class ResultsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated, ]
 
 
-# API_LOGGER_SIGNAL.listem += ResultsViewSet
-
-
 class CountStatusAPIView(APIView):
     def get(self, request):
         parsed_count = ImportExcels.objects.filter(status=ImportExcels.STATUS[3][0]).count()

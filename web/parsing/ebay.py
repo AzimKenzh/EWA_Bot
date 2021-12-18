@@ -129,7 +129,8 @@ def ebay_main(instance):
             continue
         elif item['quantity'] < 3:
             continue
-        elif item['condition'].lower() not in ['new', 'new with box']:
+        elif item['condition'].lower() not in ['new', 'new with box']: #todo: 
+            #todo: new other исклюсить
             continue
         elif item['percent'] < 98:
             continue
