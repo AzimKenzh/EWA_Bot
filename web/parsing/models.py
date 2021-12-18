@@ -24,6 +24,10 @@ class ImportExcels(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=25, choices=STATUS, default=STATUS[0][0])
+    company = models.CharField(max_length=200, blank=True, null=True, verbose_name='Название компании')
+    item_title = models.CharField(max_length=200, blank=True, null=True, verbose_name='Название продукта')
+    color = models.CharField(max_length=200, blank=True, null=True, verbose_name='Цвет')
+    volume = models.CharField(max_length=200, blank=True, null=True, verbose_name='Объем')
 
 
 @receiver(post_save, sender=ImportExcels)
