@@ -19,7 +19,7 @@ headers = {
 
 
 def get_page_item_urls(html) -> List[dict]:
-    sleep(randrange(3))
+    sleep(randrange(7))
     soup = BeautifulSoup(requests.get(html, headers=headers).content.decode(), 'lxml')
     print(soup)
     amazon_ = soup.find_all('div',
@@ -59,7 +59,11 @@ def amazon_main(instance=None):
                 pass
 
     for item in parsed_items:
-        if ' '.join(item['title'].lower().split()[:4]) in ' '.join(instance.title.lower().split()[:4]):
+        item_titlee = item['title'].lower()
+        if instance.company and instance.company.lower() in item_titlee and \
+             instance.unique_value and instance.unique_value.lower() in item_titlee and \
+             instance.item_title and instance.item_title.lower() in item_titlee and \
+             instance.volume and instance.volume.lower() in item_titlee:
             try:
                 Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id,
                                                 defaults={'title': item['title']})

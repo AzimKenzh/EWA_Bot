@@ -62,17 +62,10 @@ def get_page_detail(url) -> dict:
 
     try:
         percent = soup.find('div', class_='ux-seller-section__content').text.strip('% Positive feedback').split()[-1]
-        # n_percent = re.findall(r'\b\d+\b', percent)
-        # percent = int(n_percent[0]) if len(n_percent) else 0
-
-        # print(soup.find('div', class_='ux-seller-section__item').text)
-        # print(soup.find('div', class_='ux-seller-section__content').text, 'percent===============')
         percent_n = int(percent)
     except:
-        percent = 0
+        percent_n = 0
     data['percent'] = percent_n
-    # print(type(percent_n), percent_n)
-
 
     try:
         location = soup.find('span', itemprop='availableAtOrFrom').text.split()[-1]
@@ -120,10 +113,11 @@ def ebay_main(instance):
         star = > 100
         % = > 98%
         """
-        # print(item['title'], REDUCTION_TITLE)
-        # check title of parsed item title and imported title
-        # if ' '.join(item['title'].lower().split()[:4]) in ' '.join(instance.title.lower().split()[:4]):
-        #     pass  # continue checking to save
+        """       
+        check title of parsed item title and imported title
+        if ' '.join(item['title'].lower().split()[:4]) in ' '.join(instance.title.lower().split()[:4]):
+            pass  # continue checking to save   
+        """
 
         item_titlee = item['title'].lower()
 
@@ -137,18 +131,16 @@ def ebay_main(instance):
             continue
         elif item['location'].lower() not in ['states']:
             continue
-        # saving parsed item to DB
         elif instance.company and instance.company.lower() in item_titlee and \
-                instance.color and instance.color.lower() in item_titlee and \
+                instance.unique_value and instance.unique_value.lower() in item_titlee and \
                 instance.item_title and instance.item_title.lower() in item_titlee and \
                 instance.volume and instance.volume.lower() in item_titlee:
             pass
+        # saving parsed item to DB
         try:
-            # print('saveddddddddddddddddddddddddddddd')
             Ebay.objects.update_or_create(url=item['url'], star=item['star'], quantity=item['quantity'],
                                           percent=item['percent'],  product_title_id=instance.id,
                                           defaults={'title': item['title']})   # время 0.26358866691589355
         except Exception as e:
             print(e)
-        # print(len(urls))
     return urls

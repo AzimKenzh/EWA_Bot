@@ -26,7 +26,7 @@ class ImportExcels(models.Model):
     status = models.CharField(max_length=25, choices=STATUS, default=STATUS[0][0])
     company = models.CharField(max_length=200, blank=True, null=True, verbose_name='Название компании')
     item_title = models.CharField(max_length=200, blank=True, null=True, verbose_name='Название продукта')
-    color = models.CharField(max_length=200, blank=True, null=True, verbose_name='Цвет')
+    unique_value = models.CharField(max_length=200, blank=True, null=True)
     volume = models.CharField(max_length=200, blank=True, null=True, verbose_name='Объем')
 
 

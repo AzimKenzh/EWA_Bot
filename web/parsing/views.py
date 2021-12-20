@@ -35,7 +35,7 @@ class ProductTitleViewSet(viewsets.ModelViewSet):
 
         # start parse here
         ebay_main(instance)
-        # amazon_main(instance)
+        amazon_main(instance)
         instance.status = 'parsed'
         instance.save()
         return Response('OK')
