@@ -40,7 +40,7 @@ def synchronise_firestore(sender, instance, **kwargs):
 @receiver(pre_delete, sender=ImportExcels)
 def synchronise_firestore_delete(sender, instance, using, **kwargs):
     document = FIREBASE_COLLECTION.document(str(instance.id))
-    document.reference.delete()
+    document.delete()
 
 
 class Ebay(models.Model):
