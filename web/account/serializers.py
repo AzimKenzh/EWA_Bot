@@ -33,9 +33,24 @@ class LoginSerializer(serializers.Serializer):
 
 
 class UsersSerializer(serializers.ModelSerializer):
+    status = StatusSerializer(read_only=True)
+
     class Meta:
         model = MyUser
-        fields = ('id', 'username')
+        fields = ('id', 'username', 'status')
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['status'] = StatusSerializer(instance.status).data
+        return representation
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    status = StatusSerializer(read_only=True)
+
+    class Meta:
+        model = MyUser
+        fields = ('id', 'username', 'status')
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

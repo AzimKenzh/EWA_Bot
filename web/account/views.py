@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate
 
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -53,3 +53,11 @@ class StatusViewSet(viewsets.ModelViewSet):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
     permission_classes = [IsAdminUser, ]
+
+
+class ProfileView(generics.GenericAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request, format=None):
+        return Response(self.serializer_class(request.user, context={"request": request}).data)
