@@ -36,3 +36,8 @@ class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
         fields = ('id', 'username')
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['status'] = StatusSerializer(instance.status).data
+        return representation
