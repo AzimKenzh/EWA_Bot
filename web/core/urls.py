@@ -20,7 +20,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework.routers import DefaultRouter
 
-from account.views import UsersViewSet
+from account.views import UsersViewSet, StatusViewSet
 from core import settings
 from parsing.views import *
 
@@ -29,6 +29,7 @@ router = DefaultRouter()
 router.register('product_title', ProductTitleViewSet)
 router.register('results', ResultsViewSet)
 router.register('users', UsersViewSet)
+router.register('accounts/status', StatusViewSet)
 
 schema_view = get_schema_view(
     openapi.Info(

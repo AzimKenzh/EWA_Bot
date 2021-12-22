@@ -1,7 +1,12 @@
 from rest_framework import serializers
 
-from account.models import MyUser
-from parsing.models import ImportExcels
+from account.models import MyUser, Status
+
+
+class StatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Status
+        fields = '__all__'
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -9,12 +14,13 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MyUser
-        fields = ('username', 'password')
+        fields = ('username', 'password', 'status')
 
     def create(self, validated_data):
         username = validated_data.get('username')
         password = validated_data.get('password')
-        user = MyUser.objects.create_user(username=username, password=password)
+        status = validated_data.get('status')
+        user = MyUser.objects.create_user(username=username, status=status, password=password)
         return user
 
 

@@ -30,6 +30,7 @@ class LoginView(APIView):
             'token': token.key,
             'user_id': user.pk,
             'username': user.username,
+            'status': user.status.title if user.status else None,
         })
 
 
@@ -45,4 +46,10 @@ class LogoutView(APIView):
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = MyUser.objects.all()
     serializer_class = UsersSerializer
+    permission_classes = [IsAdminUser, ]
+
+
+class StatusViewSet(viewsets.ModelViewSet):
+    queryset = Status.objects.all()
+    serializer_class = StatusSerializer
     permission_classes = [IsAdminUser, ]

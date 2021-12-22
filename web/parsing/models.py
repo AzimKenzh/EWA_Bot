@@ -15,9 +15,8 @@ FIREBASE_COLLECTION = DB.collection('items')
 class ImportExcels(models.Model):
     STATUS = [
         ('1', 'imported'),
-        ('2', 'edited'),
-        ('3', 'parsing'),
-        ('4', 'parsed'),
+        ('2', 'parsing'),
+        ('3', 'parsed'),
     ]
     title = models.TextField(blank=True, null=True)
     url = models.CharField(max_length=5000, blank=True, null=True)
