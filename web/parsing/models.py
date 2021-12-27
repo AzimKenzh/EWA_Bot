@@ -23,10 +23,12 @@ class ImportExcels(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=25, choices=STATUS, default=STATUS[0][0])
-    company = models.CharField(max_length=200, blank=True, null=True, verbose_name='Название компании')
-    item_title = models.CharField(max_length=200, blank=True, null=True, verbose_name='Название продукта')
-    unique_value = models.CharField(max_length=200, blank=True, null=True)
-    volume = models.CharField(max_length=200, blank=True, null=True, verbose_name='Объем')
+    # company = models.CharField(max_length=200, blank=True, null=True, verbose_name='Название компании')
+    # item_title = models.CharField(max_length=200, blank=True, null=True, verbose_name='Название продукта')
+    # unique_value = models.CharField(max_length=200, blank=True, null=True)
+    # volume = models.CharField(max_length=200, blank=True, null=True, verbose_name='Объем')
+    annotations = models.JSONField(blank=True, null=True)
+
 
 
 @receiver(post_save, sender=ImportExcels)

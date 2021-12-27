@@ -1,6 +1,7 @@
 import re
 from pprint import pprint
 from typing import List
+from difflib import SequenceMatcher
 
 from bs4 import BeautifulSoup
 import requests
@@ -119,7 +120,8 @@ def ebay_main(instance):
             pass  # continue checking to save   
         """
 
-        item_titlee = item['title'].lower()
+        # item_titlee = round(SequenceMatcher(None, item['title'].lower(), instance.title).ratio() * 100)
+        # print(item_titlee, '------site------', item['title'], '--------import------', instance.title)
 
         if item['star'] < 100:
             continue
@@ -131,12 +133,12 @@ def ebay_main(instance):
             continue
         elif item['location'].lower() not in ['states']:
             continue
-        elif instance.company and instance.company.lower() in item_titlee and \
-                instance.unique_value and instance.unique_value.lower() in item_titlee and \
-                instance.item_title and instance.item_title.lower() in item_titlee and \
-                instance.volume and instance.volume.lower() in item_titlee:
-            pass
-        # saving parsed item to DB
+        # elif instance.company and instance.company.lower() in item_titlee and \
+        #         instance.unique_value and instance.unique_value.lower() in item_titlee and \
+        #         instance.item_title and instance.item_title.lower() in item_titlee and \
+        #         instance.volume and instance.volume.lower() in item_titlee:
+        #     pass
+        # # saving parsed item to DB
         try:
             Ebay.objects.update_or_create(url=item['url'], star=item['star'], quantity=item['quantity'],
                                           percent=item['percent'],  product_title_id=instance.id,

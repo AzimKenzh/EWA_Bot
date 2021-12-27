@@ -1,6 +1,7 @@
 from random import randrange
 from time import sleep
 from typing import List
+from difflib import  SequenceMatcher
 
 import requests
 from bs4 import BeautifulSoup
@@ -59,16 +60,19 @@ def amazon_main(instance=None):
                 pass
 
     for item in parsed_items:
-        item_titlee = item['title'].lower()
-        if instance.company and instance.company.lower() in item_titlee and \
-             instance.unique_value and instance.unique_value.lower() in item_titlee and \
-             instance.item_title and instance.item_title.lower() in item_titlee and \
-             instance.volume and instance.volume.lower() in item_titlee:
-            try:
-                Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id,
-                                                defaults={'title': item['title']})
-            except Exception as e:
-                print(e)
+
+        item_titlee = round(SequenceMatcher(None, item['title'].lower(), instance.title).ratio() * 100)
+        print(item_titlee, '------site------', item['title'], '--------import------', instance.title)
+        # item_titlee = item['title'].lower()
+        # if instance.company and instance.company.lower() in item_titlee and \
+        #      instance.unique_value and instance.unique_value.lower() in item_titlee and \
+        #      instance.item_title and instance.item_title.lower() in item_titlee and \
+        #      instance.volume and instance.volume.lower() in item_titlee:
+        #     try:
+        #         Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id,
+        #                                         defaults={'title': item['title']})
+        #     except Exception as e:
+        #         print(e)
 
     return parsed_items
 

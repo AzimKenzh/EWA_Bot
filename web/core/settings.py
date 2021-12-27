@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'flat_json_widget',
+
     'django_better_admin_arrayfield',
 
     'corsheaders',

@@ -20,3 +20,5 @@ django-better-admin-arrayfield==1.4.2
 PyJWT==2.3.0
 firebase-admin==5.2.0
 drf-api-logger
+django-flat-json-widget==0.1.3
+
