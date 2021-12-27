@@ -1,5 +1,4 @@
 import re
-from pprint import pprint
 from typing import List
 from difflib import SequenceMatcher
 
@@ -118,10 +117,14 @@ def ebay_main(instance):
         check title of parsed item title and imported title
         if ' '.join(item['title'].lower().split()[:4]) in ' '.join(instance.title.lower().split()[:4]):
             pass  # continue checking to save   
+            
+        
+        elif annotation[0] and annotation[0].lower() in item_titlee and \
+                annotation[1] and annotation[1].lower() in item_titlee and \
+                annotation[2] and annotation[2].lower() in item_titlee and \
+                annotation[3] and annotation[3].lower() in item_titlee:
+            pass
         """
-
-        # item_titlee = round(SequenceMatcher(None, item['title'].lower(), instance.title).ratio() * 100)
-        # print(item_titlee, '------site------', item['title'], '--------import------', instance.title)
 
         if item['star'] < 100:
             continue
@@ -133,12 +136,23 @@ def ebay_main(instance):
             continue
         elif item['location'].lower() not in ['states']:
             continue
-        # elif instance.company and instance.company.lower() in item_titlee and \
-        #         instance.unique_value and instance.unique_value.lower() in item_titlee and \
-        #         instance.item_title and instance.item_title.lower() in item_titlee and \
-        #         instance.volume and instance.volume.lower() in item_titlee:
-        #     pass
-        # # saving parsed item to DB
+        #filtering by similar words
+        else:
+            if instance.annotations:
+                passing = True
+                for i in ' '.join(instance.annotations.values()).split():
+                    print(i.lower().strip() in item['title'].lower(), '-------', item['title'].lower(), '-------', i.lower())
+                    if i.lower().strip() not in item['title'].lower():
+                        passing = False
+                        break
+                if not passing:
+                    continue
+            else:
+                similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
+                print(similarity, '================== similarity')
+                if similarity < 75:
+                    continue
+        #saving parsed item to DB
         try:
             Ebay.objects.update_or_create(url=item['url'], star=item['star'], quantity=item['quantity'],
                                           percent=item['percent'],  product_title_id=instance.id,

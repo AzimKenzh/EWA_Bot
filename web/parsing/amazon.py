@@ -59,20 +59,35 @@ def amazon_main(instance=None):
             except Exception as exc:
                 pass
 
-    for item in parsed_items:
+    """ item_titlee = item['title'].lower()
+        if instance.company and instance.company.lower() in item_titlee and \
+             instance.unique_value and instance.unique_value.lower() in item_titlee and \
+             instance.item_title and instance.item_title.lower() in item_titlee and \
+             instance.volume and instance.volume.lower() in item_titlee:
+        """
 
-        item_titlee = round(SequenceMatcher(None, item['title'].lower(), instance.title).ratio() * 100)
-        print(item_titlee, '------site------', item['title'], '--------import------', instance.title)
-        # item_titlee = item['title'].lower()
-        # if instance.company and instance.company.lower() in item_titlee and \
-        #      instance.unique_value and instance.unique_value.lower() in item_titlee and \
-        #      instance.item_title and instance.item_title.lower() in item_titlee and \
-        #      instance.volume and instance.volume.lower() in item_titlee:
-        #     try:
-        #         Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id,
-        #                                         defaults={'title': item['title']})
-        #     except Exception as e:
-        #         print(e)
+    for item in parsed_items:
+        if instance.annotations:
+            passing = True
+            for i in ' '.join(instance.annotations.values()).split():
+                print(i.lower().strip() in item['title'].lower(), '-------', item['title'].lower(), '-------',
+                      i.lower())
+                if i.lower().strip() not in item['title'].lower():
+                    passing = False
+                    break
+            if not passing:
+                continue
+        else:
+            similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
+            print(similarity, '================== similarity')
+            if similarity < 75:
+                continue
+
+            try:
+                Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id,
+                                                defaults={'title': item['title']})
+            except Exception as e:
+                print(e)
 
     return parsed_items
 
