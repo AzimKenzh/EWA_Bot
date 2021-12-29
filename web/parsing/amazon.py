@@ -56,6 +56,7 @@ def amazon_main(instance=None):
             try:
                 data = future.result()
                 parsed_items.extend(data)
+                print(data)
             except Exception as exc:
                 pass
 

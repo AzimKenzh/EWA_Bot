@@ -31,7 +31,7 @@ class ImportExcels(models.Model):
 def synchronise_firestore(sender, instance, **kwargs):
     document = FIREBASE_COLLECTION.document(str(instance.id))
     document.set({'status': instance.get_status_display(), 'title': instance.title, 'url': instance.url,
-                  'created_at': instance.created_at, 'updated_at': instance.updated_at, 'annotations': instance.annotations})
+                  'created_at': instance.created_at, 'updated_at': instance.updated_at})
 
 
 @receiver(pre_delete, sender=ImportExcels)
