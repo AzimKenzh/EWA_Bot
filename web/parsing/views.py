@@ -34,8 +34,8 @@ class ProductTitleViewSet(viewsets.ModelViewSet):
         instance.save()
 
         # start parse here
-        ebay_main(instance)
         amazon_main(instance)
+        ebay_main(instance)
         instance.status = 'parsed'
         instance.save()
         return Response('OK')
@@ -49,8 +49,8 @@ class AllParseAPIView(APIView):
             instance.save()
 
             # start parse here
-            ebay_main(instance)
             amazon_main(instance)
+            ebay_main(instance)
             instance.status = 'parsed'
             instance.save()
 

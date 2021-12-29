@@ -156,3 +156,4 @@ pgdata
 docker-compose.yml
 nginx/admin-app
 
+web/parsing/test.html

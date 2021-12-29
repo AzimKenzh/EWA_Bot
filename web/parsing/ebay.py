@@ -126,6 +126,8 @@ def ebay_main(instance):
             pass
         """
 
+        similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
+        print(similarity, '================== similarity')
         if item['star'] < 100:
             continue
         elif item['quantity'] < 3:
@@ -137,21 +139,20 @@ def ebay_main(instance):
         elif item['location'].lower() not in ['states']:
             continue
         #filtering by similar words
-        else:
-            if instance.annotations:
-                passing = True
-                for i in ' '.join(instance.annotations.values()).split():
-                    print(i.lower().strip() in item['title'].lower(), '-------', item['title'].lower(), '-------', i.lower())
-                    if i.lower().strip() not in item['title'].lower():
-                        passing = False
-                        break
-                if not passing:
-                    continue
-            else:
-                similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
-                print(similarity, '================== similarity')
-                if similarity < 75:
-                    continue
+        # else:
+            # if instance.annotations:
+            #     passing = True
+            #     for i in ' '.join(instance.annotations.values()).split():
+            #         print(i.lower().strip() in item['title'].lower(), '-------', item['title'].lower(), '-------', i.lower())
+            #         if i.lower().strip() not in item['title'].lower():
+            #             passing = False
+            #             break
+            #     if not passing:
+            #         continue
+            # else:
+
+        elif similarity < 75:
+            continue
         #saving parsed item to DB
         try:
             Ebay.objects.update_or_create(url=item['url'], star=item['star'], quantity=item['quantity'],
