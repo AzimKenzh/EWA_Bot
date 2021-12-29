@@ -16,6 +16,8 @@ headers = {
             'Accept-Language': 'en-US, en;q=0.5'
 }
 
+proxies = {"http": "http://164.90.164.198",
+           "https": "https://164.90.164.198"}
 
 def get_page_item_urls(html) -> List[dict]:
     sleep(randrange(7))
