@@ -11,7 +11,7 @@ from concurrent.futures import as_completed, ThreadPoolExecutor
 from parsing.models import Amazon
 
 headers = {
-    'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Safari/605.1.15",
+    "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36',
     'Accept-Language': "en-gb",
     'Accept-Encoding': 'br, gzip, deflate',
     'Accept': 'test/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -43,7 +43,7 @@ def get_page_item_urls(html) -> List[dict]:
 def amazon_main(instance=None):
     if instance:
         title = instance.title.replace(' ', '+')
-        amazons_url = [f'https://www.amazon.com/s?k={title}&ref=nb_sb_noss',]
+        amazons_url = [f"https://www.amazon.com/s?k={title}&ref=nb_sb_noss",]
     else:
         ''
 

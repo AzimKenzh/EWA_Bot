@@ -26,7 +26,6 @@ class ImportExcels(models.Model):
     annotations = models.JSONField(blank=True, null=True)
 
 
-
 @receiver(post_save, sender=ImportExcels)
 def synchronise_firestore(sender, instance, **kwargs):
     document = FIREBASE_COLLECTION.document(str(instance.id))
