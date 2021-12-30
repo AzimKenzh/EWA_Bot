@@ -16,11 +16,11 @@ headers = {
             'Accept-Language': 'en-US, en;q=0.5'
 }
 
-proxies = {"http": "http://3.228.198.34"}
+proxies = {"https": "https://149.19.224.36"}
 
 def get_page_item_urls(html) -> List[dict]:
     sleep(randrange(7))
-    soup = BeautifulSoup(requests.get(html, proxies=proxies, headers=headers).content.decode(), 'lxml')
+    soup = BeautifulSoup(requests.get(html, headers=headers).content.decode(), 'lxml')
     print(soup)
     amazon_ = soup.find_all('div',
                             class_='sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col s-widget-spacing-small sg-col-4-of-20')
