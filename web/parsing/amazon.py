@@ -25,10 +25,9 @@ headers = {
             'Accept-Language': 'en-US, en;q=0.5'
 }
 
-proxies = {"https": "https://149.19.224.36"}
 
 def get_page_item_urls(html) -> List[dict]:
-    time.sleep(3)
+    time.sleep(7)
     soup = BeautifulSoup(requests.get(html, headers=headers).content.decode(), 'html.parser')
     print(soup)
     amazon_ = soup.find_all('div',
