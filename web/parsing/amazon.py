@@ -1,3 +1,4 @@
+import time
 from random import randrange
 from time import sleep
 from typing import List
@@ -19,7 +20,7 @@ headers = {
 proxies = {"https": "https://149.19.224.36"}
 
 def get_page_item_urls(html) -> List[dict]:
-    sleep(randrange(7))
+    time.sleep(3)
     soup = BeautifulSoup(requests.get(html, headers=headers).content.decode(), 'lxml')
     print(soup)
     amazon_ = soup.find_all('div',
