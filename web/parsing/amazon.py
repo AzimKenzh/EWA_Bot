@@ -20,9 +20,14 @@ from parsing.models import Amazon
 # ]
 
 headers = {
-    'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.32 (KHTML, like Gecko) Chrome/82.0.12.17 Safari/535.42',
-            'Accept-Language': 'en-US, en;q=0.5'
+    'Host': 'www.amazon.com',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.5',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Connection': 'keep-alive',
+    'Upgrade-Insecure-Requests': '1',
+    'TE': 'Trailers'
 }
 
 proxies = {
@@ -31,7 +36,7 @@ proxies = {
 
 def get_page_item_urls(html) -> List[dict]:
     time.sleep(7)
-    soup = BeautifulSoup(requests.get(html, proxies=proxies, headers=headers).content.decode(), 'html.parser')
+    soup = BeautifulSoup(requests.get(html, headers=headers).content.decode(), 'html.parser')
     print(soup)
     amazon_ = soup.find_all('div',
                             class_='sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col s-widget-spacing-small sg-col-4-of-20')
