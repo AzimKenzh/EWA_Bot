@@ -25,18 +25,18 @@ class ImportExcels(models.Model):
     status = models.CharField(max_length=25, choices=STATUS, default=STATUS[0][0])
     annotations = models.JSONField(blank=True, null=True)
 
-#
-# @receiver(post_save, sender=ImportExcels)
-# def synchronise_firestore(sender, instance, **kwargs):
-#     document = FIREBASE_COLLECTION.document(str(instance.id))
-#     document.set({'status': instance.get_status_display(), 'title': instance.title, 'url': instance.url,
-#                   'created_at': instance.created_at, 'updated_at': instance.updated_at})
-#
-#
-# @receiver(pre_delete, sender=ImportExcels)
-# def synchronise_firestore_delete(sender, instance, using, **kwargs):
-#     document = FIREBASE_COLLECTION.document(str(instance.id))
-#     document.delete()
+
+@receiver(post_save, sender=ImportExcels)
+def synchronise_firestore(sender, instance, **kwargs):
+    document = FIREBASE_COLLECTION.document(str(instance.id))
+    document.set({'status': instance.get_status_display(), 'title': instance.title, 'url': instance.url,
+                  'created_at': instance.created_at, 'updated_at': instance.updated_at})
+
+
+@receiver(pre_delete, sender=ImportExcels)
+def synchronise_firestore_delete(sender, instance, using, **kwargs):
+    document = FIREBASE_COLLECTION.document(str(instance.id))
+    document.delete()
 
 
 class Ebay(models.Model):
