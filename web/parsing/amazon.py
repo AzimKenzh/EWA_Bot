@@ -36,7 +36,7 @@ proxies = {
 
 def get_page_item_urls(html) -> List[dict]:
     time.sleep(7)
-    soup = BeautifulSoup(requests.get(html, headers=headers).content.decode(), 'html.parser')
+    soup = BeautifulSoup(requests.get(html, proxies=proxies, headers=headers).content.decode(), 'html.parser')
     print(soup)
     amazon_ = soup.find_all('div',
                             class_='sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col s-widget-spacing-small sg-col-4-of-20')
