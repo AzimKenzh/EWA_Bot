@@ -47,7 +47,7 @@ proxies = {
   # "https":'https://98.12.195.129'
   # "http":'socks5://192.111.130.5'
   # "https":'socks5://192.111.130.5'
-    "http": 'http://127.0.0.1:8080/'
+    "http": 'http://127.0.0.1:8080'
 
 }
 
@@ -118,11 +118,11 @@ def amazon_main(instance=None):
             if similarity < 75:
                 continue
 
-            # try:
-            #     Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id,
-            #                                     defaults={'title': item['title']})
-            # except Exception as e:
-            #     print(e)
+            try:
+                Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id,
+                                                defaults={'title': item['title']})
+            except Exception as e:
+                print(e)
 
     return parsed_items
 
