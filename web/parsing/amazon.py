@@ -23,14 +23,16 @@ from parsing.models import Amazon
 # ]
 
 headers = {
-    'Host': 'www.amazon.com',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0',
+    # 'Host': 'www.amazon.com',
+    # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0',
+    # 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_18_3) AppleWebKit/537.34 (KHTML, like Gecko) Chrome/82.0.412.92 Safari/539.36',
+    'User-Agent': 'Mozilla/5.0',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
     'Accept-Language': 'en-US,en;q=0.5',
     'Accept-Encoding': 'gzip, deflate, br',
-    'Connection': 'keep-alive',
-    'Upgrade-Insecure-Requests': '1',
-    'TE': 'Trailers'
+    # 'Connection': 'keep-alive',
+    # 'Upgrade-Insecure-Requests': '1',
+    # 'TE': 'Trailers'
 }
 
 # proxies = {
@@ -40,16 +42,16 @@ headers = {
 # socks.set_default_proxy(socks.SOCKS5, "localhost", 9050)
 # a = socket.socket = socks.socksocket
 
-proxies = {
-  # "http":'socks5://98.162.25.23',
-  # "https":'https://98.12.195.129'
-  "http":'socks5://192.111.130.5'
-  # "https":'socks5://192.111.130.5'
-}
+# proxies = {
+#   # "http":'socks5://98.162.25.23',
+#   # "https":'https://98.12.195.129'
+#   "http":'socks5://192.111.130.5'
+#   # "https":'socks5://192.111.130.5'
+# }
 
 def get_page_item_urls(html) -> List[dict]:
     time.sleep(7)
-    soup = BeautifulSoup(requests.get(html, proxies=proxies, headers=headers).content.decode(), 'html.parser')
+    soup = BeautifulSoup(requests.get(html, headers=headers).content.decode(), 'html.parser')
         #request.urlopen(html).content.decode(), 'html.parser')
                          #
     print(soup)
