@@ -1,12 +1,11 @@
 import time
 from random import randrange
 from time import sleep
-import socket
 from typing import List
-from difflib import  SequenceMatcher
+from difflib import SequenceMatcher
+from urllib import request
 import socks
 import socket
-from urllib import request
 import requests
 from bs4 import BeautifulSoup
 
@@ -39,8 +38,8 @@ headers = {
 #     "http": "socks5://98.162.25.23"
 # }
 #
-# socks.set_default_proxy(socks.SOCKS5, "localhost", 9050)
-# a = socket.socket = socks.socksocket
+s = socks.set_default_proxy(socks.SOCKS5, "localhost", port=8080)
+
 
 proxies = {
   # "http":'socks5://98.162.25.23',
@@ -53,7 +52,7 @@ proxies = {
 
 def get_page_item_urls(html) -> List[dict]:
     time.sleep(randrange(7))
-    soup = BeautifulSoup(requests.get(html, proxies=proxies, headers=headers).content.decode(), 'html.parser')
+    soup = BeautifulSoup(requests.get(html, s, headers=headers).content.decode(), 'html.parser')
         #request.urlopen(html).content.decode(), 'html.parser')
                          #
     print(soup)
