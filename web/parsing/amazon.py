@@ -1,9 +1,12 @@
 import time
 from random import randrange
 from time import sleep
+import socket
 from typing import List
 from difflib import  SequenceMatcher
-
+import socks
+import socket
+from urllib import request
 import requests
 from bs4 import BeautifulSoup
 
@@ -30,13 +33,25 @@ headers = {
     'TE': 'Trailers'
 }
 
+# proxies = {
+#     "http": "socks5://98.162.25.23"
+# }
+#
+# socks.set_default_proxy(socks.SOCKS5, "localhost", 9050)
+# a = socket.socket = socks.socksocket
+
 proxies = {
-    "http": "socks5://98.162.25.23"
+  # "http":'socks5://98.162.25.23',
+  # "https":'https://98.12.195.129'
+  "http":'socks5://192.111.130.5'
+  # "https":'socks5://192.111.130.5'
 }
 
 def get_page_item_urls(html) -> List[dict]:
     time.sleep(7)
     soup = BeautifulSoup(requests.get(html, proxies=proxies, headers=headers).content.decode(), 'html.parser')
+        #request.urlopen(html).content.decode(), 'html.parser')
+                         #
     print(soup)
     amazon_ = soup.find_all('div',
                             class_='sg-col-4-of-12 s-result-item s-asin sg-col-4-of-16 sg-col s-widget-spacing-small sg-col-4-of-20')
