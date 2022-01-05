@@ -42,16 +42,18 @@ headers = {
 # socks.set_default_proxy(socks.SOCKS5, "localhost", 9050)
 # a = socket.socket = socks.socksocket
 
-# proxies = {
-#   # "http":'socks5://98.162.25.23',
-#   # "https":'https://98.12.195.129'
-#   "http":'socks5://192.111.130.5'
-#   # "https":'socks5://192.111.130.5'
-# }
+proxies = {
+  # "http":'socks5://98.162.25.23',
+  # "https":'https://98.12.195.129'
+  # "http":'socks5://192.111.130.5'
+  # "https":'socks5://192.111.130.5'
+    "http": 'http://127.0.0.1:8080/'
+
+}
 
 def get_page_item_urls(html) -> List[dict]:
-    time.sleep(7)
-    soup = BeautifulSoup(requests.get(html, headers=headers).content.decode(), 'html.parser')
+    time.sleep(randrange(7))
+    soup = BeautifulSoup(requests.get(html, proxies=proxies, headers=headers).content.decode(), 'html.parser')
         #request.urlopen(html).content.decode(), 'html.parser')
                          #
     print(soup)
@@ -116,11 +118,11 @@ def amazon_main(instance=None):
             if similarity < 75:
                 continue
 
-            try:
-                Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id,
-                                                defaults={'title': item['title']})
-            except Exception as e:
-                print(e)
+            # try:
+            #     Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id,
+            #                                     defaults={'title': item['title']})
+            # except Exception as e:
+            #     print(e)
 
     return parsed_items
 
