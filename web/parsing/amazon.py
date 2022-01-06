@@ -41,20 +41,24 @@ headers = {
 # }
 #
 
-proxies = {
-  # "http":'socks5://98.162.25.23',
-  # "https":'https://98.12.195.129'
-  # "http":'socks5://192.111.130.5'
-  # "https":'socks5://192.111.130.5'
-    "http": 'http://127.0.0.1:8000'
-
-}
+# proxies = {
+#   # "http":'socks5://98.162.25.23',
+#   # "https":'https://98.12.195.129'
+#   # "http":'socks5://192.111.130.5'
+#   # "https":'socks5://192.111.130.5'
+#     "http": 'socks5://127.0.0.1:9050',
+#     "https": 'socks5://127.0.0.1:9050'
+#
+# }
 
 # opener = urllib2.build_opener(SocksiPyHandler(socks.SOCKS5, "127.0.0.1", 9050))
 
 # print opener.open("http://www.somesite.com/") # All requests made by the opener will pass through the SOCKS proxy
 
 # s = urllib2.build_opener(SocksiPyHandler(socks.SOCKS5, "127.0.0.1"))
+
+s = requests.session()
+proxies = s.proxies = {'http':  'socks5://127.0.0.1:9150'}
 
 def get_page_item_urls(html) -> List[dict]:
     time.sleep(randrange(7))
