@@ -1,13 +1,15 @@
 import time
+import urllib
 from random import randrange
 from time import sleep
 from typing import List
 from difflib import SequenceMatcher
-from urllib import request
-import socks
-import socket
 import requests
+import socks
 from bs4 import BeautifulSoup
+
+import urllib.request as urllib2
+from sockshandler import SocksiPyHandler
 
 from concurrent.futures import as_completed, ThreadPoolExecutor
 
@@ -38,21 +40,25 @@ headers = {
 #     "http": "socks5://98.162.25.23"
 # }
 #
-s = socks.set_default_proxy(socks.SOCKS5, "localhost", port=8080)
-
 
 proxies = {
   # "http":'socks5://98.162.25.23',
   # "https":'https://98.12.195.129'
   # "http":'socks5://192.111.130.5'
   # "https":'socks5://192.111.130.5'
-    "http": 'http://127.0.0.1:8080'
+    "http": 'http://127.0.0.1:8000'
 
 }
 
+# opener = urllib2.build_opener(SocksiPyHandler(socks.SOCKS5, "127.0.0.1", 9050))
+
+# print opener.open("http://www.somesite.com/") # All requests made by the opener will pass through the SOCKS proxy
+
+# s = urllib2.build_opener(SocksiPyHandler(socks.SOCKS5, "127.0.0.1"))
+
 def get_page_item_urls(html) -> List[dict]:
     time.sleep(randrange(7))
-    soup = BeautifulSoup(requests.get(html, s, headers=headers).content.decode(), 'html.parser')
+    soup = BeautifulSoup(requests.get(html, proxies=proxies, headers=headers).content.decode(), 'html.parser')
         #request.urlopen(html).content.decode(), 'html.parser')
                          #
     print(soup)
