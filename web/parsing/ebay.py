@@ -151,7 +151,7 @@ def ebay_main(instance):
             #         continue
             # else:
 
-        elif similarity < 75:
+        elif similarity < 65:
             continue
         #saving parsed item to DB
         try:
