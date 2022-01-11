@@ -151,8 +151,8 @@ def ebay_main(instance):
             #         continue
             # else:
 
-        # elif similarity < 65:
-        #     continue
+        elif similarity < 40:
+            continue
         #saving parsed item to DB
         try:
             Ebay.objects.update_or_create(url=item['url'], star=item['star'], quantity=item['quantity'],
