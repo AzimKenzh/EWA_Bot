@@ -25,9 +25,9 @@ from parsing.models import Amazon
 
 headers = {
     'Host': 'www.amazon.com',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0',
+    # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0',
     # 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_18_3) AppleWebKit/537.34 (KHTML, like Gecko) Chrome/82.0.412.92 Safari/539.36',
-    # 'User-Agent': 'Mozilla/5.0',
+    'User-Agent': 'Mozilla/5.0',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
     'Accept-Language': 'en-US,en;q=0.5',
     'Accept-Encoding': 'gzip, deflate, br',
@@ -58,11 +58,11 @@ headers = {
 # s = urllib2.build_opener(SocksiPyHandler(socks.SOCKS5, "127.0.0.1"))
 
 s = requests.session()
-proxies = {'socks':  'socks5://167.179.75.165:33427'}
+proxies = {'socks':  'socks5://51.15.223.153:1080'}
 
 def get_page_item_urls(html) -> List[dict]:
     time.sleep(randrange(7))
-    soup = BeautifulSoup(requests.get(html, proxies=proxies, headers=headers).content.decode(), 'html.parser')
+    soup = BeautifulSoup(requests.get(html, proxies=proxies, headers=headers).content.decode(), 'lxml')
         #request.urlopen(html).content.decode(), 'html.parser')
                          #
     print(soup)
