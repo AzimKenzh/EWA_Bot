@@ -130,8 +130,8 @@ def ebay_main(instance):
         print(similarity, '================== similarity')
         if item['star'] < 100:
             continue
-        elif item['quantity'] < 3:
-            continue
+        # elif item['quantity'] < 3:
+        #     continue
         elif item['condition'].lower() not in ['new', 'new with box']:
             continue
         elif item['percent'] < 98:
