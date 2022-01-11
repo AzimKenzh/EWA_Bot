@@ -58,7 +58,7 @@ headers = {
 # s = urllib2.build_opener(SocksiPyHandler(socks.SOCKS5, "127.0.0.1"))
 
 s = requests.session()
-proxies = {'http':  'socks5://192.252.220.92:17328'}
+proxies = {'http':  'socks5://51.15.223.153:1080'}
 
 def get_page_item_urls(html) -> List[dict]:
     time.sleep(randrange(7))
