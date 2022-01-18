@@ -16,6 +16,15 @@ class EbaySerializerAdmin(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class EbayAllSerializerAdmin(serializers.ModelSerializer):
+    title = serializers.CharField(max_length=800, required=False)
+    url = serializers.URLField(required=False)
+
+    class Meta:
+        model = EbayAll
+        fields = '__all__'
+
+
 class EbaySerializerExport(serializers.ModelSerializer):
     title = serializers.CharField(max_length=800, required=False)
     url = serializers.URLField(required=False)
@@ -52,12 +61,17 @@ class ImportExcelSerializer(serializers.ModelSerializer):
 
 
 class ResultsSerializer(serializers.ModelSerializer):
+    ebay = EbaySerializerAdmin(required=False)
+    ebay_all = EbayAllSerializerAdmin(required=False)
+    amazon = AmazonSerializerAdmin(required=False)
+
     class Meta:
         model = ImportExcels
-        fields = ('id', 'title')
+        fields = ('id', 'title', 'ebay', 'ebay_all', 'amazon')
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['ebay'] = EbaySerializerAdmin(instance.ebays.all(), many=True, context=self.context).data
+        representation['ebay_all'] = EbayAllSerializerAdmin(instance.ebays.all(), many=True, context=self.context).data
         representation['amazon'] = AmazonSerializerAdmin(instance.amazons.all(), many=True, context=self.context).data
         return representation

@@ -5,7 +5,7 @@ from difflib import SequenceMatcher
 from bs4 import BeautifulSoup
 import requests
 from concurrent.futures import as_completed, ThreadPoolExecutor
-from parsing.models import Ebay
+from parsing.models import Ebay, EbayAll
 
 
 def get_page_item_urls(in_url) -> List[str]:
@@ -29,12 +29,16 @@ def get_page_detail(url) -> dict:
     soup = BeautifulSoup(requests.get(url).content.decode(), 'lxml')
     data = {'url': url}
 
+    print(data['url'])
+
     try:
         title = soup.find('h1', id='itemTitle').text.strip('Details about')
 
     except:
         title = ''
     data['title'] = title
+    # print(data['title'], 'title')
+    # print(len(data['title']))
 
     try:
         condition = soup.find('div', id='vi-itm-cond').text
@@ -42,6 +46,7 @@ def get_page_detail(url) -> dict:
     except:
         condition = ''
     data['condition'] = condition
+    # print(data['condition'], 'condition')
 
     try:
         quantity = soup.find('span', id='qtySubTxt').text.strip()
@@ -51,21 +56,25 @@ def get_page_detail(url) -> dict:
     except:
         quantity = 0
     data['quantity'] = quantity
+    print(data['quantity'], 'quantity')
 
     try:
-        star = soup.find('div', class_='ux-seller-section__item').text
-        n_star = re.findall(r'\b\d+\b', star)
-        star = int(n_star[0]) if len(n_star) else 0
+        star = soup.find('div', class_='ux-seller-section__content').text.strip('% Positive feedback').split()[2]
+        # n_star = re.findall(r'\b\d+\b', star)
+        # star = int(n_star[0]) if len(n_star) else 0
+        star_n = int(star)
     except:
-        star = 0
-    data['star'] = star
+        star_n = 0
+    data['star'] = star_n
+    print(data['star'], 'star', type(star_n))
 
     try:
-        percent = soup.find('div', class_='ux-seller-section__content').text.strip('% Positive feedback').split()[-1]
-        percent_n = int(percent)
+        percent = soup.find('div', class_='ux-seller-section__content').text.split()[4].strip('%')
+        percent_n = float(percent)
     except:
         percent_n = 0
     data['percent'] = percent_n
+    print(data['percent'], 'percent', type(percent_n))
 
     try:
         location = soup.find('span', itemprop='availableAtOrFrom').text.split()[-1]
@@ -73,6 +82,7 @@ def get_page_detail(url) -> dict:
     except:
         location = ''
     data['location'] = location
+    # print(data['location'], 'location \n')
 
     return data
 
@@ -80,7 +90,7 @@ def get_page_detail(url) -> dict:
 def ebay_main(instance):
     title = instance.title.replace(' ', '+')
     ebay_urls = [f'https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw={title}&_sacat=0', ]
-
+    print(ebay_urls)
     items_data = []  # items from details page
     urls = []  # urls from listing page
 
@@ -92,6 +102,7 @@ def ebay_main(instance):
             try:
                 data = future.result()
                 urls.extend(data)
+                print(len(data))
             except Exception as exc:
                 pass
 
@@ -105,7 +116,30 @@ def ebay_main(instance):
             except Exception as exc:
                 pass
 
-    # # filtering and saving to database
+    ## filtering and saving to database
+    for item in items_data:
+        similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
+        print(similarity, '================== similarity allllllllllllll')
+
+        if item['star'] < 100:
+            continue
+        elif item['condition'].lower() not in ['new', 'new with box']:
+            continue
+        elif item['percent'] < 98:
+            continue
+        elif item['location'].lower() not in ['states']:
+            continue
+        elif similarity < 1:
+            continue
+        ## saving parsed item to DB
+        try:
+            EbayAll.objects.update_or_create(url=item['url'], star=item['star'], quantity=item['quantity'],
+                                             percent=item['percent'], product_title_id=instance.id, similarity=similarity,
+                                            defaults={'title': item['title']})  # время 0.26358866691589355
+        except Exception as e:
+            print(e)
+
+
     for item in items_data:
         """ Filtering conditions:
         condition = new and new with box
@@ -113,12 +147,12 @@ def ebay_main(instance):
         star = > 100
         % = > 98%
         """
-        """       
+        """
         check title of parsed item title and imported title
         if ' '.join(item['title'].lower().split()[:4]) in ' '.join(instance.title.lower().split()[:4]):
-            pass  # continue checking to save   
-            
-        
+            pass  # continue checking to save
+
+
         elif annotation[0] and annotation[0].lower() in item_titlee and \
                 annotation[1] and annotation[1].lower() in item_titlee and \
                 annotation[2] and annotation[2].lower() in item_titlee and \
@@ -130,33 +164,35 @@ def ebay_main(instance):
         print(similarity, '================== similarity')
         if item['star'] < 100:
             continue
-        # elif item['quantity'] < 3:
-        #     continue
+        elif item['quantity'] < 3:
+            continue
         elif item['condition'].lower() not in ['new', 'new with box']:
             continue
         elif item['percent'] < 98:
             continue
         elif item['location'].lower() not in ['states']:
             continue
-        #filtering by similar words
-        # else:
-            # if instance.annotations:
-            #     passing = True
-            #     for i in ' '.join(instance.annotations.values()).split():
-            #         print(i.lower().strip() in item['title'].lower(), '-------', item['title'].lower(), '-------', i.lower())
-            #         if i.lower().strip() not in item['title'].lower():
-            #             passing = False
-            #             break
-            #     if not passing:
-            #         continue
-            # else:
 
-        elif similarity < 40:
+
+        # # filtering by similar words
+        # else:
+        #     if instance.annotations:
+        #         passing = True
+        #         for i in ' '.join(instance.annotations.values()).split():
+        #             print(i.lower().strip() in item['title'].lower(), '-------', item['title'].lower(), '-------', i.lower())
+        #             if i.lower().strip() not in item['title'].lower():
+        #                 passing = False
+        #                 break
+        #         if not passing:
+        #             continue
+        #     else:
+
+        elif similarity < 70:
             continue
-        #saving parsed item to DB
+        # saving parsed item to DB
         try:
             Ebay.objects.update_or_create(url=item['url'], star=item['star'], quantity=item['quantity'],
-                                          percent=item['percent'],  product_title_id=instance.id,
+                                          percent=item['percent'],  product_title_id=instance.id, similarity=similarity,
                                           defaults={'title': item['title']})   # время 0.26358866691589355
         except Exception as e:
             print(e)

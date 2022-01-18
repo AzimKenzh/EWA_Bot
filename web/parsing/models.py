@@ -5,7 +5,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 
 
-certificate_location = './firebase/ewa-bot-d54ca-firebase-adminsdk-zj7gl-5ce88f753c.json'
+certificate_location = './firebase/ea-bot-3a1e0-firebase-adminsdk-twl7l-440e17e98f.json'
 cred = credentials.Certificate(certificate_location)
 firebase_admin.initialize_app(cred)
 DB = firestore.client()
@@ -47,6 +47,24 @@ class Ebay(models.Model):
     quantity = models.IntegerField(blank=True, null=True)
     percent = models.IntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    similarity = models.IntegerField(blank=True, null=True, verbose_name='Сходство')
+
+    def __str__(self):
+        return self.title or ''
+
+    class Meta:
+        ordering = ('-quantity',)
+
+
+class EbayAll(models.Model):
+    product_title = models.ForeignKey(ImportExcels, on_delete=models.CASCADE, related_name='ebaysall', null=True)
+    title = models.TextField(verbose_name='Название', blank=True, null=True)
+    url = models.URLField(max_length=5000, blank=True, null=True)
+    star = models.IntegerField(blank=True, null=True)
+    quantity = models.IntegerField(blank=True, null=True)
+    percent = models.IntegerField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    similarity = models.IntegerField(blank=True, null=True, verbose_name='Сходство')
 
     def __str__(self):
         return self.title or ''
