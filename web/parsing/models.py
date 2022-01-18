@@ -5,7 +5,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 
 
-certificate_location = './firebase/ea-bot-3a1e0-firebase-adminsdk-twl7l-440e17e98f.json'
+certificate_location = './firebase/ea-bot-6e8ea-firebase-adminsdk-lpig8-7b4adc4818.json'
 cred = credentials.Certificate(certificate_location)
 firebase_admin.initialize_app(cred)
 DB = firestore.client()
