@@ -121,12 +121,12 @@ def ebay_main(instance):
         similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
         # print(similarity, '================== similarity allllllllllllll')
 
-        if item['star'] < 100:
+        # if item['star'] < 100:
+        #     continue
+        if item['condition'].lower() not in ['new', 'new with box']:
             continue
-        elif item['condition'].lower() not in ['new', 'new with box']:
-            continue
-        elif item['percent'] < 98:
-            continue
+        # elif item['percent'] < 98:
+        #     continue
         elif item['location'].lower() not in ['states']:
             continue
         elif similarity < 1:
