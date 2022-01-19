@@ -196,4 +196,6 @@ def ebay_main(instance):
                                           defaults={'title': item['title']})   # время 0.26358866691589355
         except Exception as e:
             print(e)
+    print(ebay_urls)
+
     return urls

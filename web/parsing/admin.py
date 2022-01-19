@@ -22,7 +22,7 @@ class AdminEbayAll(admin.ModelAdmin):
 
 @admin.register(Amazon)
 class AdminAmazon(admin.ModelAdmin):
-    list_display = ['id', 'title', 'created_at']
+    list_display = ['id', 'title', 'created_at', 'similarity']
     list_display_links = ['id', 'title']
 
 

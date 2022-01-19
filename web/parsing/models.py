@@ -78,6 +78,7 @@ class Amazon(models.Model):
     title = models.TextField(verbose_name='Название', blank=True, null=True)
     url = models.URLField(max_length=5000, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    similarity = models.IntegerField(blank=True, null=True, verbose_name='Сходство')
 
     def __str__(self):
         return self.title

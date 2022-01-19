@@ -125,11 +125,11 @@ def amazon_main(instance=None):
             similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
             print(similarity, '========== similarity (Amazon)')
 
-            if similarity < 75:
+            if similarity < 60:
                 continue
 
             try:
-                Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id,
+                Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id, similarity=similarity,
                                                 defaults={'title': item['title']})
             except Exception as e:
                 print(e)
