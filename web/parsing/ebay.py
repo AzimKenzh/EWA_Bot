@@ -119,7 +119,7 @@ def ebay_main(instance):
     ## filtering and saving to database
     for item in items_data:
         similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
-        print(similarity, '================== similarity allllllllllllll')
+        # print(similarity, '================== similarity allllllllllllll')
 
         if item['star'] < 100:
             continue
@@ -161,7 +161,7 @@ def ebay_main(instance):
         """
 
         similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
-        print(similarity, '================== similarity')
+        print(similarity, '========== similarity (Ebay)')
         if item['star'] < 100:
             continue
         elif item['quantity'] < 3:

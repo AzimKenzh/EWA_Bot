@@ -123,7 +123,8 @@ def amazon_main(instance=None):
         #         continue
         # else:
             similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
-            print(similarity, '================== similarity')
+            print(similarity, '========== similarity (Amazon)')
+
             if similarity < 75:
                 continue
 

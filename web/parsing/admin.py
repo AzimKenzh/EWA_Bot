@@ -10,12 +10,14 @@ from parsing.models import Ebay, Amazon, ImportExcels, EbayAll
 class AdminEbay(admin.ModelAdmin):
     list_display = ['id', 'title', 'quantity', 'percent', 'similarity']
     list_display_links = ['id', 'title']
+    ordering = ('-similarity', )
 
 
 @admin.register(EbayAll)
 class AdminEbayAll(admin.ModelAdmin):
     list_display = ['id', 'title', 'quantity', 'percent', 'similarity']
     list_display_links = ['id', 'title']
+    ordering = ('-similarity', )
 
 
 @admin.register(Amazon)
