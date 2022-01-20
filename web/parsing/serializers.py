@@ -72,6 +72,6 @@ class ResultsSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['ebay'] = EbaySerializerAdmin(instance.ebays.all(), many=True, context=self.context).data
-        representation['ebay_all'] = EbayAllSerializerAdmin(instance.ebays_all.all(), many=True, context=self.context).data
+        representation['ebay_all'] = EbayAllSerializerAdmin(instance.ebaysall.all(), many=True, context=self.context).data
         representation['amazon'] = AmazonSerializerAdmin(instance.amazons.all(), many=True, context=self.context).data
         return representation
