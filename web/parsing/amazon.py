@@ -72,7 +72,7 @@ s = requests.session()
 # socks.set_default_proxy(socks.SOCKS5, "127.0.0.1", 8080)
 # proxies = socket.socket = socks.socksocket
 
-proxies = {'http': 'http://127.0.0.1:8080'}
+proxies = {'http':  'socks5://51.15.223.153:1080'}
 
 def get_page_item_urls(html) -> List[dict]:
     time.sleep(randrange(7))
