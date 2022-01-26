@@ -13,7 +13,8 @@ from sockshandler import SocksiPyHandler
 
 from concurrent.futures import as_completed, ThreadPoolExecutor
 
-from parsing.models import Amazon
+from parsing.models import Amazon, AmazonAll
+
 
 # header_list = [
 #     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15',
@@ -58,11 +59,24 @@ headers = {
 # s = urllib2.build_opener(SocksiPyHandler(socks.SOCKS5, "127.0.0.1"))
 
 s = requests.session()
-proxies = {'http':  'socks5://51.15.223.153:1080'}
+# proxies = {'http':  'socks5://51.15.223.153:1080'}
+
+
+# from urllib import request as urllib2
+# import socks
+# import socket
+# from sockshandler import SocksiPyHandler
+
+# proxies = urllib2.build_opener(SocksiPyHandler(socks.SOCKS5, "51.15.223.153", 1080))
+# opener.open("http://www.somesite.com/")
+# socks.set_default_proxy(socks.SOCKS5, "127.0.0.1", 8080)
+# proxies = socket.socket = socks.socksocket
+
+proxies = {'http': 'http://127.0.0.1:8080'}
 
 def get_page_item_urls(html) -> List[dict]:
     time.sleep(randrange(7))
-    soup = BeautifulSoup(requests.get(html, proxies=proxies, headers=headers).content.decode(), 'lxml')
+    soup = BeautifulSoup(requests.get(html, proxies=proxies,  headers=headers).content.decode(), 'lxml')
         #request.urlopen(html).content.decode(), 'html.parser')
                          #
     print(soup)
@@ -73,10 +87,10 @@ def get_page_item_urls(html) -> List[dict]:
 
     for amazon in amazon_:
         title = amazon.find('span', class_='a-size-base-plus a-color-base a-text-normal').text
-        try:
-            url = f"https://www.amazon.com{amazon.find('h2', class_='a-size-mini a-spacing-none a-color-base s-line-clamp-4').find('a').get('href')}"
-        except:
-            url = ''
+        # try:
+        url = f"https://www.amazon.com{amazon.find('div', class_='a-section a-spacing-none a-spacing-top-small s-title-instructions-style').find('h2', class_='a-size-mini a-spacing-none a-color-base s-line-clamp-4').find('a', class_='a-link-normal s-link-style a-text-normal').get('href')}"
+        # except:
+        #     url = ''
 
         data = {'url': url, 'title': title}
         amazon_items.append(data)
@@ -87,6 +101,7 @@ def amazon_main(instance=None):
     if instance:
         title = instance.title.replace(' ', '+')
         amazons_url = [f"https://www.amazon.com/s?k={title}&ref=nb_sb_noss",]
+        print(amazons_url)
     else:
         ''
 
@@ -99,7 +114,7 @@ def amazon_main(instance=None):
             try:
                 data = future.result()
                 parsed_items.extend(data)
-                print(data)
+                print(len(data))
             except Exception as exc:
                 pass
 
@@ -109,6 +124,18 @@ def amazon_main(instance=None):
              instance.item_title and instance.item_title.lower() in item_titlee and \
              instance.volume and instance.volume.lower() in item_titlee:
         """
+
+    for item in parsed_items:
+        similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
+
+        if similarity < 0:
+            continue
+
+        try:
+            AmazonAll.objects.update_or_create(url=item['url'], product_title_id=instance.id, similarity=similarity,
+                                            defaults={'title': item['title']})
+        except Exception as e:
+            print(e)
 
     for item in parsed_items:
         # if instance.annotations:
@@ -122,17 +149,17 @@ def amazon_main(instance=None):
         #     if not passing:
         #         continue
         # else:
-            similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
-            print(similarity, '========== similarity (Amazon)')
+        similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
+        print(similarity, '========== similarity (Amazon)')
 
-            if similarity < 60:
-                continue
+        if similarity < 70:
+            continue
 
-            try:
-                Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id, similarity=similarity,
-                                                defaults={'title': item['title']})
-            except Exception as e:
-                print(e)
+        try:
+            Amazon.objects.update_or_create(url=item['url'], product_title_id=instance.id, similarity=similarity,
+                                            defaults={'title': item['title']})
+        except Exception as e:
+            print(e)
 
     return parsed_items
 

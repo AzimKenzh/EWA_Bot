@@ -47,6 +47,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include("account.urls")),
     path('all_parse/', AllParseAPIView.as_view()),
+    path('all_parse_amazon/', AllParseAmazonAPIView.as_view()),
     path('count_status/', CountStatusAPIView.as_view()),
     path('', include(router.urls)),
 ]

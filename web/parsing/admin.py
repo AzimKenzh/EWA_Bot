@@ -3,7 +3,7 @@ from django import forms
 from flat_json_widget.widgets import FlatJsonWidget
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
-from parsing.models import Ebay, Amazon, ImportExcels, EbayAll
+from parsing.models import Ebay, Amazon, ImportExcels, EbayAll, AmazonAll
 
 
 @admin.register(Ebay)
@@ -24,6 +24,14 @@ class AdminEbayAll(admin.ModelAdmin):
 class AdminAmazon(admin.ModelAdmin):
     list_display = ['id', 'title', 'created_at', 'similarity']
     list_display_links = ['id', 'title']
+    ordering = ('-similarity', )
+
+
+@admin.register(AmazonAll)
+class AdminAmazonAll(admin.ModelAdmin):
+    list_display = ['id', 'title', 'created_at', 'similarity']
+    list_display_links = ['id', 'title']
+    ordering = ('-similarity', )
 
 
 class JsonDocumentFormSite(forms.ModelForm):
