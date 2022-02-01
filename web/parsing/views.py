@@ -114,7 +114,8 @@ class SearchApiView(APIView):
         title = Ebays.objects.all()
         if query:
             title = title.filter(title__icontains=query)
+            context = {'request': request}
             return Response({
-                'ebays': EbaysInlineSerializerAdmin(title, many=True).data,
+                'ebays': EbaysInlineSerializerAdmin(title, context=context, many=True).data,
             })
         return Response([])
