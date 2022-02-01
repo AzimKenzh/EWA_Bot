@@ -3,7 +3,7 @@ from django import forms
 from flat_json_widget.widgets import FlatJsonWidget
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
-from parsing.models import Ebay, Amazon, ImportExcels, EbayAll, AmazonAll
+from parsing.models import Ebay, ImportExcels, EbayAll
 
 
 @admin.register(Ebay)
@@ -20,20 +20,6 @@ class AdminEbayAll(admin.ModelAdmin):
     ordering = ('-similarity', )
 
 
-@admin.register(Amazon)
-class AdminAmazon(admin.ModelAdmin):
-    list_display = ['id', 'title', 'created_at', 'similarity']
-    list_display_links = ['id', 'title']
-    ordering = ('-similarity', )
-
-
-@admin.register(AmazonAll)
-class AdminAmazonAll(admin.ModelAdmin):
-    list_display = ['id', 'title', 'created_at', 'similarity']
-    list_display_links = ['id', 'title']
-    ordering = ('-similarity', )
-
-
 class JsonDocumentFormSite(forms.ModelForm):
     class Meta:
         widgets = {
@@ -45,5 +31,24 @@ class JsonDocumentFormSite(forms.ModelForm):
 class AdminImportExcel(admin.ModelAdmin, DynamicArrayMixin):
     list_display = ['id', 'title']
     form = JsonDocumentFormSite
+
+
+# @admin.register(Amazon)
+# class AdminAmazon(admin.ModelAdmin):
+#     list_display = ['id', 'title', 'created_at', 'similarity']
+#     list_display_links = ['id', 'title']
+#     ordering = ('-similarity', )
+
+
+# @admin.register(AmazonAll)
+# class AdminAmazonAll(admin.ModelAdmin):
+#     list_display = ['id', 'title', 'created_at', 'similarity']
+#     list_display_links = ['id', 'title']
+#     ordering = ('-similarity', )
+
+
+# @admin.register(Proxies)
+# class AdminProxies(admin.ModelAdmin):
+#     list_display = ['id', 'proxy']
 
 

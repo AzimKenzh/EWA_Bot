@@ -39,15 +39,6 @@ class AmazonSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=200)
 
 
-class AmazonSerializerAdmin(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=800, required=False)
-    url = serializers.URLField(required=False, max_length=900)
-
-    class Meta:
-        model = Amazon
-        fields = '__all__'
-
-
 class ImportExcelSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -63,7 +54,7 @@ class ImportExcelSerializer(serializers.ModelSerializer):
 class ResultsSerializer(serializers.ModelSerializer):
     ebay = EbaySerializerAdmin(required=False)
     ebay_all = EbayAllSerializerAdmin(required=False)
-    amazon = AmazonSerializerAdmin(required=False)
+    # amazon = AmazonSerializerAdmin(required=False)
 
     class Meta:
         model = ImportExcels
@@ -73,5 +64,14 @@ class ResultsSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['ebay'] = EbaySerializerAdmin(instance.ebays.all(), many=True, context=self.context).data
         representation['ebay_all'] = EbayAllSerializerAdmin(instance.ebaysall.all(), many=True, context=self.context).data
-        representation['amazon'] = AmazonSerializerAdmin(instance.amazons.all(), many=True, context=self.context).data
+        # representation['amazon'] = AmazonSerializerAdmin(instance.amazons.all(), many=True, context=self.context).data
         return representation
+
+
+# class AmazonSerializerAdmin(serializers.ModelSerializer):
+#     title = serializers.CharField(max_length=800, required=False)
+#     url = serializers.URLField(required=False, max_length=900)
+#
+#     class Meta:
+#         model = Amazon
+#         fields = '__all__'

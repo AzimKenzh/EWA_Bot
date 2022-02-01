@@ -29,17 +29,17 @@ class ImportExcels(models.Model):
         return self.title or ''
 
 
-@receiver(post_save, sender=ImportExcels)
-def synchronise_firestore(sender, instance, **kwargs):
-    document = FIREBASE_COLLECTION.document(str(instance.id))
-    document.set({'status': instance.get_status_display(), 'title': instance.title, 'url': instance.url,
-                  'created_at': instance.created_at, 'updated_at': instance.updated_at})
-
-
-@receiver(pre_delete, sender=ImportExcels)
-def synchronise_firestore_delete(sender, instance, using, **kwargs):
-    document = FIREBASE_COLLECTION.document(str(instance.id))
-    document.delete()
+# @receiver(post_save, sender=ImportExcels)
+# def synchronise_firestore(sender, instance, **kwargs):
+#     document = FIREBASE_COLLECTION.document(str(instance.id))
+#     document.set({'status': instance.get_status_display(), 'title': instance.title, 'url': instance.url,
+#                   'created_at': instance.created_at, 'updated_at': instance.updated_at})
+#
+#
+# @receiver(pre_delete, sender=ImportExcels)
+# def synchronise_firestore_delete(sender, instance, using, **kwargs):
+#     document = FIREBASE_COLLECTION.document(str(instance.id))
+#     document.delete()
 
 
 class Ebay(models.Model):
@@ -76,23 +76,26 @@ class EbayAll(models.Model):
         ordering = ('-quantity',)
 
 
-class Amazon(models.Model):
-    product_title = models.ForeignKey(ImportExcels, on_delete=models.CASCADE, related_name='amazons', null=True)
-    title = models.TextField(verbose_name='Название', blank=True, null=True)
-    url = models.URLField(max_length=5000, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    similarity = models.IntegerField(blank=True, null=True, verbose_name='Сходство')
-
-    def __str__(self):
-        return self.title
-
-
-class AmazonAll(models.Model):
-    product_title = models.ForeignKey(ImportExcels, on_delete=models.CASCADE, related_name='amazons_all', null=True)
-    title = models.TextField(verbose_name='Название', blank=True, null=True)
-    url = models.URLField(max_length=5000, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    similarity = models.IntegerField(blank=True, null=True, verbose_name='Сходство')
-
-    def __str__(self):
-        return self.title or ''
+# class Amazon(models.Model):
+#     product_title = models.ForeignKey(ImportExcels, on_delete=models.CASCADE, related_name='amazons', null=True)
+#     title = models.TextField(verbose_name='Название', blank=True, null=True)
+#     url = models.URLField(max_length=5000, blank=True, null=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     similarity = models.IntegerField(blank=True, null=True, verbose_name='Сходство')
+#
+#     def __str__(self):
+#         return self.title
+#
+#
+# class AmazonAll(models.Model):
+#     product_title = models.ForeignKey(ImportExcels, on_delete=models.CASCADE, related_name='amazons_all', null=True)
+#     title = models.TextField(verbose_name='Название', blank=True, null=True)
+#     url = models.URLField(max_length=5000, blank=True, null=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     similarity = models.IntegerField(blank=True, null=True, verbose_name='Сходство')
+#
+#     def __str__(self):
+#         return self.title or ''
+#
+# class Proxies(models.Model):
+#     proxy = models.CharField(max_length=100)

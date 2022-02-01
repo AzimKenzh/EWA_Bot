@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets, filters, status
 
-from parsing.amazon import amazon_main
+# from parsing.amazon import amazon_main
 from parsing.ebay import ebay_main
 from parsing.serializers import *
 
@@ -39,17 +39,17 @@ class ProductTitleViewSet(viewsets.ModelViewSet):
         instance.save()
         return Response('OK')
 
-    @action(detail=True, methods=['post'])
-    def parse_amazon(self, request, pk=None):
-        instance = self.get_object()
-        instance.status = 'parsing'
-        instance.save()
-
-        # start parse here
-        amazon_main(instance)
-        instance.status = 'parsed'
-        instance.save()
-        return Response('OK')
+    # @action(detail=True, methods=['post'])
+    # def parse_amazon(self, request, pk=None):
+    #     instance = self.get_object()
+    #     instance.status = 'parsing'
+    #     instance.save()
+    #
+    #     # start parse here
+    #     # amazon_main(instance)
+    #     instance.status = 'parsed'
+    #     instance.save()
+    #     return Response('OK')
 
 
 class AllParseAPIView(APIView):
@@ -68,19 +68,19 @@ class AllParseAPIView(APIView):
         return Response('OK')
 
 
-class AllParseAmazonAPIView(APIView):
-    def post(self, request):
-        queryset = ImportExcels.objects.exclude(status__in=['parsing', 'parsed'])
-        for instance in queryset:
-            instance.status = 'parsing'
-            instance.save()
-
-            # start parse here
-            amazon_main(instance)
-            instance.status = 'parsed'
-            instance.save()
-
-        return Response('OK')
+# class AllParseAmazonAPIView(APIView):
+#     def post(self, request):
+#         queryset = ImportExcels.objects.exclude(status__in=['parsing', 'parsed'])
+#         for instance in queryset:
+#             instance.status = 'parsing'
+#             instance.save()
+#
+#             # start parse here
+#             amazon_main(instance)
+#             instance.status = 'parsed'
+#             instance.save()
+#
+#         return Response('OK')
 
 
 class ResultsViewSet(viewsets.ReadOnlyModelViewSet):
