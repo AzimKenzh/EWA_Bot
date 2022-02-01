@@ -5,23 +5,24 @@ from difflib import SequenceMatcher
 from bs4 import BeautifulSoup
 import requests
 from concurrent.futures import as_completed, ThreadPoolExecutor
-from parsing.models import Ebay, EbayAll
+from parsing.models import Ebay, EbayAll, Ebays
 
 
 def get_page_item_urls(in_url) -> List[str]:
     # check some data before returning url, return only good items
     # return urls of items from listing
     soup = BeautifulSoup(requests.get(in_url).content.decode(), 'lxml')
-    ebay_ = soup.find('div', class_="srp-river-results clearfix").find_all('li', class_="s-item s-item__pl-on-bottom s-item--watch-at-corner")
+    ebay_ = soup.find("ul", class_="srp-results").find_all("li")
     ebay_items = []
 
     for ebay in ebay_:
         try:
-            url = ebay.find('div', class_='s-item__wrapper clearfix').find('div', class_='s-item__info clearfix').find('a').get('href')
+            url = ebay.find("div", class_="s-item__wrapper clearfix").find("div", class_="s-item__info clearfix").find("a").get("href")
         except:
             url = ''
 
         ebay_items.append(url)
+
     return ebay_items
 
 
@@ -59,21 +60,24 @@ def get_page_detail(url) -> dict:
     print(data['quantity'], 'quantity')
 
     try:
-        star = soup.find('div', class_='ux-seller-section__content').text.strip('% Positive feedback').split()[2]
+        star = soup.find('div', class_='ux-seller-section__item').text.split()[-1].strip('()')
         # n_star = re.findall(r'\b\d+\b', star)
         # star = int(n_star[0]) if len(n_star) else 0
         star_n = int(star)
     except:
         star_n = 0
+        # star = ''
     data['star'] = star_n
     print(data['star'], 'star', type(star_n))
 
     try:
-        percent = soup.find('div', class_='ux-seller-section__content').text.split()[4].strip('%')
+        # percent = soup.find('div', class_='ux-seller-section__item').text#.split()[4].strip('%')
+        percent = soup.find('div', class_='ux-seller-section__content').text.strip('% Positive feedback').split()[2]
         percent_n = float(percent)
     except:
         percent_n = 0
     data['percent'] = percent_n
+    # data['percent'] = percent
     print(data['percent'], 'percent', type(percent_n))
 
     try:
@@ -83,6 +87,14 @@ def get_page_detail(url) -> dict:
         location = ''
     data['location'] = location
     # print(data['location'], 'location \n')
+
+    try:
+        salesman = soup.find('div', class_='ux-seller-section__item').find('span').text
+
+    except:
+        salesman = ''
+    data['salesman'] = salesman
+    print(data['salesman'], 'salesman \n')
 
     return data
 
@@ -118,6 +130,23 @@ def ebay_main(instance):
 
     ## filtering and saving to database
     for item in items_data:
+        if item['star'] < 100:
+            continue
+        if item['condition'].lower() not in ['new', 'new with box']:
+            continue
+        elif item['percent'] < 98:
+            continue
+        elif item['location'].lower() not in ['states']:
+            continue
+        ## saving parsed item to DB
+        try:
+            Ebays.objects.update_or_create(url=item['url'], star=item['star'], quantity=item['quantity'],
+                                             percent=item['percent'], salesman=item['salesman'], product_title_id=instance.id,
+                                            defaults={'title': item['title']})  # время 0.26358866691589355
+        except Exception as e:
+            print(e)
+
+    for item in items_data:
         similarity = round(SequenceMatcher(None, item['title'].lower(), instance.title.lower()).ratio() * 100)
         # print(similarity, '================== similarity allllllllllllll')
 
@@ -129,7 +158,7 @@ def ebay_main(instance):
             continue
         elif item['location'].lower() not in ['states']:
             continue
-        elif similarity < 1:
+        elif similarity < 45:
             continue
         ## saving parsed item to DB
         try:
@@ -138,7 +167,6 @@ def ebay_main(instance):
                                             defaults={'title': item['title']})  # время 0.26358866691589355
         except Exception as e:
             print(e)
-
 
     for item in items_data:
         """ Filtering conditions:

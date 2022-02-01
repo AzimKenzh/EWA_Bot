@@ -76,6 +76,23 @@ class EbayAll(models.Model):
         ordering = ('-quantity',)
 
 
+class Ebays(models.Model):
+    product_title = models.ForeignKey(ImportExcels, on_delete=models.CASCADE, related_name='ebayss', null=True)
+    title = models.TextField(verbose_name='Название', blank=True, null=True)
+    url = models.URLField(max_length=5000, blank=True, null=True)
+    star = models.IntegerField(blank=True, null=True)
+    quantity = models.IntegerField(blank=True, null=True)
+    percent = models.IntegerField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    salesman = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.title or ''
+
+    class Meta:
+        ordering = ('-quantity',)
+
+
 # class Amazon(models.Model):
 #     product_title = models.ForeignKey(ImportExcels, on_delete=models.CASCADE, related_name='amazons', null=True)
 #     title = models.TextField(verbose_name='Название', blank=True, null=True)
