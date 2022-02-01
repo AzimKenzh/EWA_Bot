@@ -16,6 +16,12 @@ class EbaySerializerAdmin(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class EbaysInlineSerializerAdmin(serializers.ModelSerializer):
+    class Meta:
+        model = Ebay
+        fields = ('id', 'title', 'url')
+
+
 class EbayAllSerializerAdmin(serializers.ModelSerializer):
     title = serializers.CharField(max_length=800, required=False)
     url = serializers.URLField(required=False)
