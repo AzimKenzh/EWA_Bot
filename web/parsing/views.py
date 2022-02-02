@@ -88,16 +88,6 @@ class ResultsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ResultsSerializer
     permission_classes = [IsAuthenticated, ]
 
-    # filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    # search_fields = ['ebayss__title']
-
-    # def get_queryset(self):
-    #     queryset = self.filter_queryset(self.queryset)
-    #     title_query = self.request.query_params.get('search')
-    #     if title_query:
-    #         queryset = queryset.filter(ebayss__title__icontains=title_query)
-    #     return queryset
-
 
 class CountStatusAPIView(APIView):
     def get(self, request):
@@ -106,16 +96,3 @@ class CountStatusAPIView(APIView):
         imported_count = ImportExcels.objects.filter(status__in=[ImportExcels.STATUS[0][0],
                                                                  ImportExcels.STATUS[1][0]]).count()
         return Response({'parsed': parsed_count, 'parsing': parsing_count, 'imported': imported_count})
-
-
-class SearchApiView(APIView):
-    def get(self, request, *args, **kwargs):
-        query = request.GET.get('search', '')
-        title = Ebays.objects.all()
-        if query:
-            title = title.filter(title__icontains=query)
-            context = {'request': request}
-            return Response({
-                'ebays': EbaysInlineSerializerAdmin(title, context=context, many=True).data,
-            })
-        return Response([])

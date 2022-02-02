@@ -164,10 +164,3 @@
 #         #     print(e)
 #
 #     return parsed_items
-#
-#
-#
-#
-#
-#
-#
